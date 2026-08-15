@@ -1,0 +1,74 @@
+:host {
+  display: block;
+  grid-area: progression;
+}
+
+.chart-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 1.5rem;
+}
+
+.chart-card__title {
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--text-strong);
+}
+
+.chart-card__body {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.chart-card__yaxis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 140px;
+  flex-shrink: 0;
+  text-align: right;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.chart-card__plot {
+  flex: 1;
+  min-width: 0;
+}
+
+.chart-card__svg {
+  width: 100%;
+  height: 140px;
+  display: block;
+}
+
+.chart-card__gridline {
+  stroke: var(--border-soft);
+  stroke-width: 1;
+}
+
+.chart-card__axis {
+  position: relative;
+  height: 1rem;
+  margin-top: 0.5rem;
+}
+
+.chart-card__axis span {
+  position: absolute;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.chart-card__axis-label--first {
+  transform: translateX(0) !important;
+}
+
+.chart-card__axis-label--last {
+  transform: translateX(-100%) !important;
+}

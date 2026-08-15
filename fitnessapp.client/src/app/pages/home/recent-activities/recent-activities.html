@@ -1,0 +1,10 @@
+<div class="recent-card" *ngIf="recentActivities().length">
+  <h2 class="recent-card__title">Recent activity</h2>
+  <ul class="recent-list">
+    <li class="recent-list__row" *ngFor="let activity of recentActivities()">
+      <span class="recent-list__sport">{{ activity.label }}</span>
+      <span class="recent-list__date">{{ activity.datetime | date: 'MMM d, HH:mm' }}</span>
+      <span class="recent-list__points">+{{ activity.points }}</span>
+    </li>
+  </ul>
+</div>

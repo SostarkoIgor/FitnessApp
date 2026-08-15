@@ -6,175 +6,31 @@
   </div>
 
   <div class="home__container" *ngIf="!loading() && !error()">
-    <div *ngIf="user() as u" class="summary-banner">
-      <div class="summary-banner__intro">
-        <p class="summary-banner__greeting">Welcome back, {{ u.firstName }}!</p>
-        <div class="summary-banner__points-row">
-          <span class="summary-banner__points">{{ u.points }}</span>
-          <span class="summary-banner__label">points</span>
-        </div>
-      </div>
-
-      <div class="summary-banner__actions">
-        <span class="summary-banner__streak" *ngIf="currentStreak() > 0">{{ currentStreak() }}-day streak</span>
-        <a class="summary-banner__link" routerLink="/leaderboard">See global leaderboard →</a>
-        <button type="button" class="summary-banner__cta" (click)="openLogForm()">+ Log activity</button>
-      </div>
-    </div>
+    <app-summary-banner
+      *ngIf="user() as u"
+      [user]="u"
+      [streak]="currentStreak()"
+      (logActivity)="openLogForm()"
+    ></app-summary-banner>
 
     <ng-container *ngIf="!statsLoading()">
-      <div class="home__grid" *ngIf="totalActivities()">
-        <div class="stats-grid">
-          <div class="stat-tile">
-            <span class="stat-tile__value">{{ totalActivities() }}</span>
-            <span class="stat-tile__label">Activities logged</span>
-          </div>
-          <div class="stat-tile">
-            <span class="stat-tile__value">{{ totalDistance() | number: '1.0-1' }}</span>
-            <span class="stat-tile__label">Km covered</span>
-          </div>
-          <div class="stat-tile">
-            <span class="stat-tile__value">{{ averagePoints() }}</span>
-            <span class="stat-tile__label">Avg pts / activity</span>
-          </div>
-          <div class="stat-tile" *ngIf="sportBreakdown()[0] as top">
-            <span class="stat-tile__value stat-tile__value--sport">{{ top.label }}</span>
-            <span class="stat-tile__label">Top sport</span>
-          </div>
-          <div class="stat-tile" *ngIf="bestDay() as best">
-            <span class="stat-tile__value">{{ best.points }}</span>
-            <span class="stat-tile__label">Best day · {{ best.date | date: 'MMM d' }}</span>
-          </div>
-        </div>
-
-        <div class="chart-card chart-card--progression" *ngIf="progression().length > 1">
-          <h2 class="chart-card__title">Score progression</h2>
-          <div class="chart-card__body">
-            <div class="chart-card__yaxis">
-              <span *ngFor="let lbl of progressionYAxis()">{{ lbl }}</span>
-            </div>
-            <div class="chart-card__plot">
-              <svg viewBox="0 0 280 120" class="chart-card__svg" preserveAspectRatio="none">
-                <line class="chart-card__gridline" x1="0" y1="4" x2="280" y2="4" />
-                <line class="chart-card__gridline" x1="0" y1="60" x2="280" y2="60" />
-                <line class="chart-card__gridline" x1="0" y1="116" x2="280" y2="116" />
-                <path
-                  [attr.d]="progressionPath()"
-                  fill="none"
-                  stroke="var(--color-violet)"
-                  stroke-width="3"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-              <div class="chart-card__axis">
-                <span
-                  *ngFor="let lbl of progressionLabels(); let first = first; let last = last"
-                  [class.chart-card__axis-label--first]="first"
-                  [class.chart-card__axis-label--last]="last"
-                  [style.left.%]="lbl.pct"
-                >{{ lbl.text }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="chart-card chart-card--pie" *ngIf="sportBreakdown().length">
-          <h2 class="chart-card__title">Points by sport</h2>
-          <div class="pie">
-            <div class="pie__circle" [style.background]="pieBackground()"></div>
-            <ul class="pie__legend">
-              <li *ngFor="let segment of sportBreakdown()">
-                <span class="pie__swatch" [style.background]="segment.color"></span>
-                <span class="pie__sport">{{ segment.label }}</span>
-                <span class="pie__points">{{ segment.points }}</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="chart-card chart-card--weekly">
-          <h2 class="chart-card__title">Last 7 days</h2>
-          <div class="bar-chart">
-            <div class="bar-chart__col" *ngFor="let day of weeklyBars()">
-              <span class="bar-chart__value">{{ day.points | number }}</span>
-              <div class="bar-chart__track">
-                <div class="bar-chart__gridlines">
-                  <span></span><span></span><span></span>
-                </div>
-                <div
-                  class="bar-chart__fill"
-                  [class.bar-chart__fill--today]="day.isToday"
-                  [style.height.%]="day.pct"
-                  [title]="day.points + ' pts'"
-                ></div>
-              </div>
-              <span class="bar-chart__label">{{ day.label }}</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="recent-card" *ngIf="recentActivities().length">
-          <h2 class="chart-card__title">Recent activity</h2>
-          <ul class="recent-list">
-            <li class="recent-list__row" *ngFor="let activity of recentActivities()">
-              <span class="recent-list__sport">{{ activity.label }}</span>
-              <span class="recent-list__date">{{ activity.datetime | date: 'MMM d, HH:mm' }}</span>
-              <span class="recent-list__points">+{{ activity.points }}</span>
-            </li>
-          </ul>
-        </div>
+      <div class="home__grid" *ngIf="hasActivities()">
+        <app-stat-tiles [activities]="activities()"></app-stat-tiles>
+        <app-progression-chart [activities]="activities()"></app-progression-chart>
+        <app-sport-breakdown [activities]="activities()"></app-sport-breakdown>
+        <app-weekly-chart [activities]="activities()"></app-weekly-chart>
+        <app-recent-activities [activities]="activities()"></app-recent-activities>
       </div>
 
-      <p class="stats__empty" *ngIf="!totalActivities()">
+      <p class="stats__empty" *ngIf="!hasActivities()">
         Log your first activity to start seeing your stats here.
       </p>
     </ng-container>
   </div>
 </section>
 
-<div class="modal-backdrop" *ngIf="showLogForm()" (click)="closeLogForm()">
-  <form class="activity-card modal-card" [formGroup]="form" (ngSubmit)="submitActivity()" (click)="$event.stopPropagation()">
-    <div class="activity-card__head">
-      <h2 class="activity-card__title">Log an activity</h2>
-      <button type="button" class="modal-card__close" (click)="closeLogForm()" aria-label="Close">×</button>
-    </div>
-
-    <label class="field">
-      <span class="field__label">Sport</span>
-      <select class="field__input" formControlName="sport">
-        <option *ngFor="let option of sportOptions" [value]="option.value">{{ option.label }}</option>
-      </select>
-    </label>
-
-    <label class="field">
-      <span class="field__label">When</span>
-      <input class="field__input" type="datetime-local" formControlName="datetime" />
-    </label>
-
-    <label class="field" *ngIf="selectedMetric() === 'distance'">
-      <span class="field__label">Distance (km)</span>
-      <input class="field__input" type="number" step="0.01" min="0.01" formControlName="distance" />
-    </label>
-
-    <label class="field" *ngIf="selectedMetric() === 'duration'">
-      <span class="field__label">Duration (mm:ss)</span>
-      <input class="field__input" type="text" placeholder="45:30" formControlName="duration" />
-    </label>
-
-    <label class="field" *ngIf="selectedMetric() === 'steps'">
-      <span class="field__label">Steps</span>
-      <input class="field__input" type="number" step="1" min="1" formControlName="steps" />
-    </label>
-
-    <ul class="activity-card__errors" *ngIf="activityErrors().length">
-      <li *ngFor="let err of activityErrors()">{{ err }}</li>
-    </ul>
-
-    <p class="activity-card__success" *ngIf="activitySuccess()">Activity added.</p>
-
-    <button class="activity-card__submit" type="submit" [disabled]="submittingActivity()">
-      {{ submittingActivity() ? 'Adding…' : 'Add activity' }}
-    </button>
-  </form>
-</div>
+<app-activity-form
+  [open]="showLogForm()"
+  (closed)="closeLogForm()"
+  (activityAdded)="onActivityAdded()"
+></app-activity-form>

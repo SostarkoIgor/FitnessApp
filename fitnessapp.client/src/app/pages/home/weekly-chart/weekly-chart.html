@@ -1,0 +1,20 @@
+<div class="chart-card">
+  <h2 class="chart-card__title">Last 7 days</h2>
+  <div class="bar-chart">
+    <div class="bar-chart__col" *ngFor="let day of weeklyBars()">
+      <span class="bar-chart__value">{{ day.points | number }}</span>
+      <div class="bar-chart__track">
+        <div class="bar-chart__gridlines">
+          <span></span><span></span><span></span>
+        </div>
+        <div
+          class="bar-chart__fill"
+          [class.bar-chart__fill--today]="day.isToday"
+          [style.height.%]="day.pct"
+          [title]="day.points + ' pts'"
+        ></div>
+      </div>
+      <span class="bar-chart__label">{{ day.label }}</span>
+    </div>
+  </div>
+</div>

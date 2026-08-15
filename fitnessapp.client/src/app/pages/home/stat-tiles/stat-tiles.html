@@ -1,0 +1,22 @@
+<div class="stats-grid">
+  <div class="stat-tile">
+    <span class="stat-tile__value">{{ totalActivities() }}</span>
+    <span class="stat-tile__label">Activities logged</span>
+  </div>
+  <div class="stat-tile">
+    <span class="stat-tile__value">{{ totalDistance() | number: '1.0-1' }}</span>
+    <span class="stat-tile__label">Km covered</span>
+  </div>
+  <div class="stat-tile">
+    <span class="stat-tile__value">{{ averagePoints() }}</span>
+    <span class="stat-tile__label">Avg pts / activity</span>
+  </div>
+  <div class="stat-tile" *ngIf="topSportLabel() as top">
+    <span class="stat-tile__value stat-tile__value--sport">{{ top }}</span>
+    <span class="stat-tile__label">Top sport</span>
+  </div>
+  <div class="stat-tile" *ngIf="bestDay() as best">
+    <span class="stat-tile__value">{{ best.points }}</span>
+    <span class="stat-tile__label">Best day · {{ best.date | date: 'MMM d' }}</span>
+  </div>
+</div>

@@ -1,0 +1,124 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 100;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 420px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.activity-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.35);
+  padding: 2rem;
+}
+
+.activity-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.activity-card__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--text-strong);
+}
+
+.modal-card__close {
+  border: none;
+  background: var(--card-bg-alt);
+  color: var(--text-muted);
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.modal-card__close:hover {
+  background: var(--border-soft);
+  color: var(--text-strong);
+}
+
+.field {
+  display: block;
+  margin-bottom: 1.1rem;
+}
+
+.field__label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+.field__input {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 2px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  background: var(--card-bg-alt);
+  color: var(--text-strong);
+}
+
+.field__input:focus {
+  outline: none;
+  border-color: var(--color-violet);
+}
+
+.activity-card__errors {
+  margin: 0 0 1rem;
+  padding-left: 1.1rem;
+  color: #dc2626;
+  font-size: 0.85rem;
+}
+
+.activity-card__success {
+  margin: 0 0 1rem;
+  color: #16a34a;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.activity-card__submit {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--gradient-warm);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 18px -8px rgba(37, 99, 235, 0.5);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.activity-card__submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 22px -8px rgba(37, 99, 235, 0.6);
+}
+
+.activity-card__submit:disabled {
+  background: #bae6fd;
+  box-shadow: none;
+  cursor: not-allowed;
+}

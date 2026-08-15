@@ -1,0 +1,43 @@
+:host {
+  display: block;
+  grid-area: tiles;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.9rem;
+}
+
+.stat-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 1rem 0.5rem;
+  text-align: center;
+}
+
+.stat-tile__value {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-violet);
+}
+
+.stat-tile__value--sport {
+  font-size: 1.05rem;
+  text-transform: capitalize;
+  color: var(--color-orange);
+}
+
+.stat-tile__label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}

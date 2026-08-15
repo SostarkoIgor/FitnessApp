@@ -1,0 +1,45 @@
+<div class="modal-backdrop" *ngIf="open()" (click)="close()">
+  <form class="activity-card modal-card" [formGroup]="form" (ngSubmit)="submitActivity()" (click)="$event.stopPropagation()">
+    <div class="activity-card__head">
+      <h2 class="activity-card__title">Log an activity</h2>
+      <button type="button" class="modal-card__close" (click)="close()" aria-label="Close">×</button>
+    </div>
+
+    <label class="field">
+      <span class="field__label">Sport</span>
+      <select class="field__input" formControlName="sport">
+        <option *ngFor="let option of sportOptions" [value]="option.value">{{ option.label }}</option>
+      </select>
+    </label>
+
+    <label class="field">
+      <span class="field__label">When</span>
+      <input class="field__input" type="datetime-local" formControlName="datetime" />
+    </label>
+
+    <label class="field" *ngIf="selectedMetric() === 'distance'">
+      <span class="field__label">Distance (km)</span>
+      <input class="field__input" type="number" step="0.01" min="0.01" formControlName="distance" />
+    </label>
+
+    <label class="field" *ngIf="selectedMetric() === 'duration'">
+      <span class="field__label">Duration (mm:ss)</span>
+      <input class="field__input" type="text" placeholder="45:30" formControlName="duration" />
+    </label>
+
+    <label class="field" *ngIf="selectedMetric() === 'steps'">
+      <span class="field__label">Steps</span>
+      <input class="field__input" type="number" step="1" min="1" formControlName="steps" />
+    </label>
+
+    <ul class="activity-card__errors" *ngIf="activityErrors().length">
+      <li *ngFor="let err of activityErrors()">{{ err }}</li>
+    </ul>
+
+    <p class="activity-card__success" *ngIf="activitySuccess()">Activity added.</p>
+
+    <button class="activity-card__submit" type="submit" [disabled]="submittingActivity()">
+      {{ submittingActivity() ? 'Adding…' : 'Add activity' }}
+    </button>
+  </form>
+</div>

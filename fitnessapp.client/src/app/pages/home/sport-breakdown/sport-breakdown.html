@@ -1,0 +1,13 @@
+<div class="chart-card" *ngIf="sportBreakdown().length">
+  <h2 class="chart-card__title">Points by sport</h2>
+  <div class="pie">
+    <div class="pie__circle" [style.background]="pieBackground()"></div>
+    <ul class="pie__legend">
+      <li *ngFor="let segment of sportBreakdown()">
+        <span class="pie__swatch" [style.background]="segment.color"></span>
+        <span class="pie__sport">{{ segment.label }}</span>
+        <span class="pie__points">{{ segment.points }}</span>
+      </li>
+    </ul>
+  </div>
+</div>
