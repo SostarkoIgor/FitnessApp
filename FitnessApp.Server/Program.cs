@@ -13,7 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseInMemoryDatabase("AppDb"));
+    options.UseSqlite(builder.Configuration.GetConnectionString("AppDb")));
 
 
 builder.Services
@@ -23,11 +23,16 @@ builder.Services
 builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IFitnessActivityService, FitnessActivityService>();
 
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.Migrate();
+}
 
 app.UseDefaultFiles();
 app.MapStaticAssets();

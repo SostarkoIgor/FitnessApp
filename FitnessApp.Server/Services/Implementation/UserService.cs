@@ -1,5 +1,7 @@
 using FitnessApp.Server.Dtos;
+using FitnessApp.Server.Mappers;
 using FitnessApp.Server.Models;
+using FitnessApp.Server.Validation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +18,12 @@ namespace FitnessApp.Server.Services.Implementation
 
         public async Task<RegisterUserResult> RegisterAsync(RegisterUserRequest request)
         {
+            var errors = UserValidator.ValidateBasicFields(request);
+            if (errors.Count > 0)
+            {
+                return RegisterUserResult.Failed(errors);
+            }
+
             var firstName = request.FirstName.Trim();
             var lastName = request.LastName.Trim();
             var normalizedFullName = $"{firstName.ToUpperInvariant()}|{lastName.ToUpperInvariant()}";
@@ -25,7 +33,7 @@ namespace FitnessApp.Server.Services.Implementation
 
             if (duplicateName)
             {
-                return RegisterUserResult.Conflict("A user with this first and last name already exists.");
+                return RegisterUserResult.Failed(new[] { "Could not create user." });
             }
 
             var user = new User
@@ -45,7 +53,7 @@ namespace FitnessApp.Server.Services.Implementation
             catch (DbUpdateException)
             {
                 // Guards against a race between the AnyAsync check above and the insert.
-                return RegisterUserResult.Conflict("A user with this first and last name already exists.");
+                return RegisterUserResult.Failed(new[] { "Could not create user." });
             }
 
             if (!result.Succeeded)
@@ -64,7 +72,7 @@ namespace FitnessApp.Server.Services.Implementation
                 return null;
             }
 
-            return new UserDto(user.Id, user.FirstName, user.LastName, user.Email ?? string.Empty);
+            return user.ToDto();
         }
     }
 }

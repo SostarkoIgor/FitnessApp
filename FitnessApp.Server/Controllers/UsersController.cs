@@ -15,15 +15,10 @@ namespace FitnessApp.Server.Controllers
             _userService = userService;
         }
 
-        [HttpPost("/register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserRequest request)
         {
             var result = await _userService.RegisterAsync(request);
-
-            if (result.IsConflict)
-            {
-                return Conflict(new { message = result.Errors.First() });
-            }
 
             if (!result.Succeeded)
             {
