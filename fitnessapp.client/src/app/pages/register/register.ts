@@ -24,6 +24,13 @@ export class Register {
   protected readonly submitting = signal(false);
   protected readonly errors = signal<string[]>([]);
 
+  protected readonly idForm = this.fb.nonNullable.group({
+    userId: ['', [Validators.required]],
+  });
+
+  protected readonly continuing = signal(false);
+  protected readonly idError = signal<string | null>(null);
+
   submit() {
     if (this.form.invalid || this.submitting()) {
       this.form.markAllAsTouched();
@@ -41,6 +48,29 @@ export class Register {
       error: (err: HttpErrorResponse) => {
         this.submitting.set(false);
         this.errors.set(err.error?.errors ?? ['Could not register. Please try again.']);
+      },
+    });
+  }
+
+  continueWithId() {
+    if (this.idForm.invalid || this.continuing()) {
+      this.idForm.markAllAsTouched();
+      return;
+    }
+
+    const userId = this.idForm.getRawValue().userId.trim();
+
+    this.continuing.set(true);
+    this.idError.set(null);
+
+    this.userService.getById(userId).subscribe({
+      next: () => {
+        this.userService.setStoredUserId(userId);
+        this.router.navigateByUrl('/');
+      },
+      error: () => {
+        this.continuing.set(false);
+        this.idError.set('No user found with that ID.');
       },
     });
   }

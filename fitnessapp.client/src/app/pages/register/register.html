@@ -1,36 +1,63 @@
 <section class="register">
-  <form class="register-card" [formGroup]="form" (ngSubmit)="submit()">
-    <h1 class="register-card__title">Create your account</h1>
-    <p class="register-card__subtitle">Enter your name to start tracking points.</p>
+  <div class="register-card">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <h1 class="register-card__title">Create your account</h1>
+      <p class="register-card__subtitle">Enter your name to start tracking points.</p>
 
-    <label class="field">
-      <span class="field__label">First name</span>
-      <input class="field__input" type="text" formControlName="firstName" autocomplete="given-name" />
-      <span
-        class="field__error"
-        *ngIf="form.controls.firstName.invalid && form.controls.firstName.touched"
-      >
-        First name is required.
-      </span>
-    </label>
+      <label class="field">
+        <span class="field__label">First name</span>
+        <input class="field__input" type="text" formControlName="firstName" autocomplete="given-name" />
+        <span
+          class="field__error"
+          *ngIf="form.controls.firstName.invalid && form.controls.firstName.touched"
+        >
+          First name is required.
+        </span>
+      </label>
 
-    <label class="field">
-      <span class="field__label">Last name</span>
-      <input class="field__input" type="text" formControlName="lastName" autocomplete="family-name" />
-      <span
-        class="field__error"
-        *ngIf="form.controls.lastName.invalid && form.controls.lastName.touched"
-      >
-        Last name is required.
-      </span>
-    </label>
+      <label class="field">
+        <span class="field__label">Last name</span>
+        <input class="field__input" type="text" formControlName="lastName" autocomplete="family-name" />
+        <span
+          class="field__error"
+          *ngIf="form.controls.lastName.invalid && form.controls.lastName.touched"
+        >
+          Last name is required.
+        </span>
+      </label>
 
-    <ul class="register-card__errors" *ngIf="errors().length">
-      <li *ngFor="let error of errors()">{{ error }}</li>
-    </ul>
+      <ul class="register-card__errors" *ngIf="errors().length">
+        <li *ngFor="let error of errors()">{{ error }}</li>
+      </ul>
 
-    <button class="register-card__submit" type="submit" [disabled]="submitting()">
-      {{ submitting() ? 'Registering…' : 'Register' }}
-    </button>
-  </form>
+      <button class="register-card__submit" type="submit" [disabled]="submitting()">
+        {{ submitting() ? 'Registering…' : 'Register' }}
+      </button>
+    </form>
+
+    <div class="register-card__divider">
+      <span>or</span>
+    </div>
+
+    <form [formGroup]="idForm" (ngSubmit)="continueWithId()">
+      <p class="register-card__subtitle">Already have an account? Enter your user ID to continue.</p>
+
+      <label class="field">
+        <span class="field__label">User ID</span>
+        <input class="field__input" type="text" formControlName="userId" autocomplete="off" />
+        <span
+          class="field__error"
+          *ngIf="idForm.controls.userId.invalid && idForm.controls.userId.touched"
+        >
+          User ID is required.
+        </span>
+      </label>
+
+      <p class="register-card__errors" *ngIf="idError()">{{ idError() }}</p>
+
+      <button class="register-card__submit register-card__submit--secondary" type="submit" [disabled]="continuing()">
+        {{ continuing() ? 'Checking…' : 'Continue with ID' }}
+      </button>
+    </form>
+  </div>
 </section>

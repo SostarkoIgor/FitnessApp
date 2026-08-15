@@ -35,4 +35,8 @@ export class UserService {
   setStoredUserId(id: string): void {
     localStorage.setItem(USER_ID_STORAGE_KEY, id);
   }
+
+  clearStoredUserId(): void {
+    localStorage.removeItem(USER_ID_STORAGE_KEY);
+  }
 }

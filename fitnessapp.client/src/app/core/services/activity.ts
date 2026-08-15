@@ -12,4 +12,8 @@ export class ActivityService {
   create(request: CreateActivityRequest): Observable<ActivityDto> {
     return this.http.post<ActivityDto>(this.baseUrl, request);
   }
+
+  getByUser(userId: string): Observable<ActivityDto[]> {
+    return this.http.get<ActivityDto[]>(this.baseUrl, { params: { userId } });
+  }
 }
