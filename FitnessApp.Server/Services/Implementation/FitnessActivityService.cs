@@ -83,10 +83,12 @@ namespace FitnessApp.Server.Services.Implementation
             var activities = await _dbContext.FitnessActivities
                 .Include(a => a.Sport)
                 .Where(a => a.UserId == userId)
-                .OrderByDescending(a => a.Datetime)
                 .ToListAsync();
 
-            return activities.Select(a => a.ToDto()).ToList();
+            return activities
+                .OrderByDescending(a => a.Datetime)
+                .Select(a => a.ToDto())
+                .ToList();
         }
     }
 }
