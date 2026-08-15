@@ -1,0 +1,57 @@
+<section class="home">
+  <div *ngIf="loading()" class="home__status">Loading your points…</div>
+
+  <div *ngIf="!loading() && error()" class="home__status home__status--error">
+    Couldn't load your points. Please try again later.
+  </div>
+
+  <div class="home__content" *ngIf="!loading() && !error()">
+    <div *ngIf="user() as u" class="points-card">
+      <p class="points-card__greeting">Welcome back, {{ u.firstName }}! 👋</p>
+      <p class="points-card__points">{{ u.points }}</p>
+      <p class="points-card__label">points 🔥</p>
+      <a class="points-card__link" routerLink="/leaderboard">See global leaderboard →</a>
+    </div>
+
+    <form class="activity-card" [formGroup]="form" (ngSubmit)="submitActivity()">
+      <h2 class="activity-card__title">Log an activity 💪</h2>
+
+      <label class="field">
+        <span class="field__label">Sport</span>
+        <select class="field__input" formControlName="sport">
+          <option *ngFor="let option of sportOptions" [value]="option.value">{{ option.label }}</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span class="field__label">When</span>
+        <input class="field__input" type="datetime-local" formControlName="datetime" />
+      </label>
+
+      <label class="field" *ngIf="selectedMetric() === 'distance'">
+        <span class="field__label">Distance (km)</span>
+        <input class="field__input" type="number" step="0.01" min="0.01" formControlName="distance" />
+      </label>
+
+      <label class="field" *ngIf="selectedMetric() === 'duration'">
+        <span class="field__label">Duration (mm:ss)</span>
+        <input class="field__input" type="text" placeholder="45:30" formControlName="duration" />
+      </label>
+
+      <label class="field" *ngIf="selectedMetric() === 'steps'">
+        <span class="field__label">Steps</span>
+        <input class="field__input" type="number" step="1" min="1" formControlName="steps" />
+      </label>
+
+      <ul class="activity-card__errors" *ngIf="activityErrors().length">
+        <li *ngFor="let err of activityErrors()">{{ err }}</li>
+      </ul>
+
+      <p class="activity-card__success" *ngIf="activitySuccess()">Nice work! Activity added 🎉</p>
+
+      <button class="activity-card__submit" type="submit" [disabled]="submittingActivity()">
+        {{ submittingActivity() ? 'Adding…' : 'Add activity' }}
+      </button>
+    </form>
+  </div>
+</section>

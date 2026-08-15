@@ -1,0 +1,36 @@
+<section class="register">
+  <form class="register-card" [formGroup]="form" (ngSubmit)="submit()">
+    <h1 class="register-card__title">Create your account</h1>
+    <p class="register-card__subtitle">Enter your name to start tracking points.</p>
+
+    <label class="field">
+      <span class="field__label">First name</span>
+      <input class="field__input" type="text" formControlName="firstName" autocomplete="given-name" />
+      <span
+        class="field__error"
+        *ngIf="form.controls.firstName.invalid && form.controls.firstName.touched"
+      >
+        First name is required.
+      </span>
+    </label>
+
+    <label class="field">
+      <span class="field__label">Last name</span>
+      <input class="field__input" type="text" formControlName="lastName" autocomplete="family-name" />
+      <span
+        class="field__error"
+        *ngIf="form.controls.lastName.invalid && form.controls.lastName.touched"
+      >
+        Last name is required.
+      </span>
+    </label>
+
+    <ul class="register-card__errors" *ngIf="errors().length">
+      <li *ngFor="let error of errors()">{{ error }}</li>
+    </ul>
+
+    <button class="register-card__submit" type="submit" [disabled]="submitting()">
+      {{ submitting() ? 'Registering…' : 'Register' }}
+    </button>
+  </form>
+</section>

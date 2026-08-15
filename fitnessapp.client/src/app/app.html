@@ -1,1 +1,11 @@
+<header class="app-header" *ngIf="showNav()">
+  <span class="app-header__title">💪 {{ title() }}</span>
+  <nav class="app-header__nav">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a routerLink="/leaderboard" routerLinkActive="active">Leaderboard</a>
+  </nav>
+</header>
 
+<main class="app-main">
+  <router-outlet></router-outlet>
+</main>

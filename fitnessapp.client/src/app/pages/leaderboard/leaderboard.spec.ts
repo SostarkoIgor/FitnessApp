@@ -4,22 +4,25 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterModule, provideRouter } from '@angular/router';
 
-import { App } from './app';
+import { Leaderboard } from './leaderboard';
 
-describe('App', () => {
-  let fixture: ComponentFixture<App>;
+describe('Leaderboard', () => {
+  let component: Leaderboard;
+  let fixture: ComponentFixture<Leaderboard>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [App],
+      declarations: [Leaderboard],
       imports: [CommonModule, RouterModule],
       providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(App);
+    fixture = TestBed.createComponent(Leaderboard);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
   });
 
   it('should create', () => {
-    expect(fixture.componentInstance).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 });

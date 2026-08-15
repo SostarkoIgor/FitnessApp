@@ -1,1 +1,41 @@
 /* You can add global styles to this file, and also import other style files */
+
+:root {
+  --color-violet: #7c3aed;
+  --color-violet-dark: #5b21b6;
+  --color-pink: #ec4899;
+  --color-orange: #f97316;
+  --color-amber: #f59e0b;
+  --color-teal: #14b8a6;
+  --color-blue: #3b82f6;
+  --color-gold: #f5b301;
+  --color-silver: #9aa5b1;
+  --color-bronze: #c9791f;
+
+  --gradient-brand: linear-gradient(120deg, var(--color-violet) 0%, var(--color-pink) 100%);
+  --gradient-warm: linear-gradient(120deg, var(--color-pink) 0%, var(--color-orange) 100%);
+  --gradient-bg: linear-gradient(160deg, #efe6fd 0%, #fde3f1 45%, #fff2da 100%);
+
+  --text-strong: #241b3a;
+  --text-muted: #6b6180;
+  --card-bg: #ffffff;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --shadow-card: 0 10px 30px -12px rgba(124, 58, 237, 0.25);
+
+  --font-display: 'Fredoka', 'Segoe UI', sans-serif;
+  --font-body: 'Nunito', 'Segoe UI', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  background: var(--gradient-bg);
+  background-attachment: fixed;
+  color: var(--text-strong);
+}

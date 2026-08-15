@@ -1,0 +1,38 @@
+<section class="leaderboard">
+  <h1 class="leaderboard__title">🏆 Global Leaderboard</h1>
+
+  <div *ngIf="loading()" class="leaderboard__status">Loading leaderboard…</div>
+
+  <div *ngIf="!loading() && error()" class="leaderboard__status leaderboard__status--error">
+    Couldn't load the leaderboard. Please try again later.
+  </div>
+
+  <div *ngIf="!loading() && !error()">
+    <div class="podium" *ngIf="top3().length">
+      <div
+        *ngFor="let entry of top3(); let i = index"
+        class="podium__place"
+        [class.podium__place--first]="i === 0"
+        [class.podium__place--second]="i === 1"
+        [class.podium__place--third]="i === 2"
+        [class.podium__place--me]="entry.userId === currentUserId"
+      >
+        <span class="podium__medal">{{ i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉' }}</span>
+        <span class="podium__name">{{ entry.firstName }} {{ entry.lastName }}</span>
+        <span class="podium__points">{{ entry.points }} pts</span>
+      </div>
+    </div>
+
+    <ol *ngIf="rest().length" class="leaderboard__list">
+      <li
+        *ngFor="let entry of rest(); let i = index"
+        class="leaderboard__row"
+        [class.leaderboard__row--me]="entry.userId === currentUserId"
+      >
+        <span class="leaderboard__rank">{{ i + 4 }}</span>
+        <span class="leaderboard__name">{{ entry.firstName }} {{ entry.lastName }}</span>
+        <span class="leaderboard__points">{{ entry.points }}</span>
+      </li>
+    </ol>
+  </div>
+</section>

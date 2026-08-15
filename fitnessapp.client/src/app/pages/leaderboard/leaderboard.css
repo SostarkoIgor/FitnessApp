@@ -1,0 +1,133 @@
+.leaderboard__title {
+  margin: 0 0 1.5rem;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--text-strong);
+}
+
+.leaderboard__status {
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.leaderboard__status--error {
+  color: #b91c1c;
+}
+
+.podium {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.podium__place {
+  flex: 1;
+  max-width: 9.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 0.75rem 1.5rem;
+  color: #fff;
+  text-align: center;
+  box-shadow: var(--shadow-card);
+}
+
+.podium__medal {
+  font-size: 1.8rem;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.podium__name {
+  font-weight: 800;
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+.podium__points {
+  margin-top: 0.35rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.podium__place--first {
+  order: 2;
+  min-height: 13rem;
+  background: linear-gradient(160deg, var(--color-gold) 0%, #fcd34d 100%);
+  transform: translateY(-0.75rem);
+}
+
+.podium__place--first .podium__medal {
+  font-size: 2.4rem;
+}
+
+.podium__place--first .podium__name {
+  font-size: 1.05rem;
+}
+
+.podium__place--first .podium__points {
+  font-size: 1.2rem;
+}
+
+.podium__place--second {
+  order: 1;
+  min-height: 10.5rem;
+  background: linear-gradient(160deg, var(--color-silver) 0%, #cbd5e1 100%);
+}
+
+.podium__place--third {
+  order: 3;
+  min-height: 9rem;
+  background: linear-gradient(160deg, var(--color-bronze) 0%, #e0a05e 100%);
+}
+
+.podium__place--me {
+  outline: 3px solid var(--color-violet);
+  outline-offset: 2px;
+}
+
+.leaderboard__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.leaderboard__row {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr auto;
+  align-items: center;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid #f3edfb;
+}
+
+.leaderboard__row:last-child {
+  border-bottom: none;
+}
+
+.leaderboard__row--me {
+  background: #f5f0ff;
+}
+
+.leaderboard__rank {
+  color: var(--color-violet);
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.leaderboard__name {
+  color: var(--text-strong);
+  font-weight: 700;
+}
+
+.leaderboard__points {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--color-pink);
+}
