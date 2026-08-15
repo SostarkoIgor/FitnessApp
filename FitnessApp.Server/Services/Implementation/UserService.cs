@@ -1,19 +1,19 @@
+using FitnessApp.Server.Data;
 using FitnessApp.Server.Dtos;
 using FitnessApp.Server.Mappers;
 using FitnessApp.Server.Models;
 using FitnessApp.Server.Validation;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace FitnessApp.Server.Services.Implementation
 {
     public class UserService : IUserService
     {
-        private readonly UserManager<User> _userManager;
+        private readonly AppDbContext _dbContext;
 
-        public UserService(UserManager<User> userManager)
+        public UserService(AppDbContext dbContext)
         {
-            _userManager = userManager;
+            _dbContext = dbContext;
         }
 
         public async Task<RegisterUserResult> RegisterAsync(RegisterUserRequest request)
@@ -28,7 +28,7 @@ namespace FitnessApp.Server.Services.Implementation
             var lastName = request.LastName.Trim();
             var normalizedFullName = $"{firstName.ToUpperInvariant()}|{lastName.ToUpperInvariant()}";
 
-            var duplicateName = await _userManager.Users
+            var duplicateName = await _dbContext.Users
                 .AnyAsync(u => u.NormalizedFullName == normalizedFullName);
 
             if (duplicateName)
@@ -38,17 +38,16 @@ namespace FitnessApp.Server.Services.Implementation
 
             var user = new User
             {
-                UserName = request.Email,
-                Email = request.Email,
                 FirstName = firstName,
                 LastName = lastName,
                 NormalizedFullName = normalizedFullName
             };
 
-            IdentityResult result;
+            _dbContext.Users.Add(user);
+
             try
             {
-                result = await _userManager.CreateAsync(user, request.Password);
+                await _dbContext.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
@@ -56,17 +55,12 @@ namespace FitnessApp.Server.Services.Implementation
                 return RegisterUserResult.Failed(new[] { "Could not create user." });
             }
 
-            if (!result.Succeeded)
-            {
-                return RegisterUserResult.Failed(result.Errors.Select(e => e.Description));
-            }
-
             return RegisterUserResult.Success(user.Id);
         }
 
         public async Task<UserDto?> GetByIdAsync(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _dbContext.Users.FindAsync(id);
             if (user is null)
             {
                 return null;

@@ -1,15 +1,16 @@
-﻿using FitnessApp.Server.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using FitnessApp.Server.Models;
 using Microsoft.EntityFrameworkCore;
 namespace FitnessApp.Server.Data
 {
-    public class AppDbContext : IdentityDbContext<User>
+    public class AppDbContext : DbContext
     {
         public AppDbContext(
         DbContextOptions<AppDbContext> options)
         : base(options)
         {
         }
+
+        public DbSet<User> Users => Set<User>();
 
         public DbSet<FitnessActivity> FitnessActivities => Set<FitnessActivity>();
 

@@ -6,6 +6,6 @@ namespace FitnessApp.Server.Mappers
     public static class UserMapper
     {
         public static UserDto ToDto(this User user) =>
-            new(user.Id, user.FirstName, user.LastName, user.Email ?? string.Empty);
+            new(user.Id, user.FirstName, user.LastName);
     }
 }

@@ -1,5 +1,4 @@
 using FitnessApp.Server.Data;
-using FitnessApp.Server.Models;
 using FitnessApp.Server.Services;
 using FitnessApp.Server.Services.Implementation;
 using Microsoft.EntityFrameworkCore;
@@ -14,13 +13,6 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("AppDb")));
-
-
-builder.Services
-    .AddIdentityApiEndpoints<User>()
-    .AddEntityFrameworkStores<AppDbContext>();
-
-builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IFitnessActivityService, FitnessActivityService>();
@@ -50,13 +42,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
-app.UseAuthorization();
-
 app.MapControllers();
-
-
-app.MapGroup("/api/auth").MapIdentityApi<User>();
 
 app.MapFallbackToFile("/index.html");
 
