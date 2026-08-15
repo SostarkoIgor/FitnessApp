@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="fitnessapp.client/fitnessapp.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="FitnessApp.Server/FitnessApp.Server.csproj" />
+</Solution>

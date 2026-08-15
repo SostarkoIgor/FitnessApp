@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -sk -o /dev/null -w \"HTTP %{http_code}\\\\n\" https://localhost:53692/ --max-time 5)"
+    ]
+  }
+}
