@@ -12,5 +12,10 @@ namespace FitnessApp.Server.Models
 
         // Uppercased "FIRSTNAME|LASTNAME" used to enforce case-insensitive uniqueness via a DB index.
         public string NormalizedFullName { get; set; } = string.Empty;
+
+        // Denormalized sum of this user's FitnessActivity.Points, kept in sync on activity creation.
+
+        //I added this, despite a bit of redundancy, to efficiently generate the leaderboard without needing to sum all activities for each user all the time.
+        public int Points { get; set; }
     }
 }

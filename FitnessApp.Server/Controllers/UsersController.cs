@@ -39,5 +39,12 @@ namespace FitnessApp.Server.Controllers
 
             return Ok(user);
         }
+
+        [HttpGet("leaderboard")]
+        public async Task<IActionResult> GetLeaderboard()
+        {
+            var leaderboard = await _userService.GetLeaderboardAsync();
+            return Ok(leaderboard);
+        }
     }
 }

@@ -68,5 +68,18 @@ namespace FitnessApp.Server.Services.Implementation
 
             return user.ToDto();
         }
+
+        public async Task<IReadOnlyList<LeaderboardEntryDto>> GetLeaderboardAsync()
+        {
+            var leaderboard = await _dbContext.Users
+                .OrderByDescending(u => u.Points)
+                .ThenBy(u => u.LastName)
+                .ThenBy(u => u.FirstName)
+                .ToListAsync();
+
+            return leaderboard
+                .Select(u => new LeaderboardEntryDto(u.Id, u.FirstName, u.LastName, u.Points))
+                .ToList();
+        }
     }
 }

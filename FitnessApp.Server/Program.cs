@@ -26,6 +26,14 @@ using (var scope = app.Services.CreateScope())
     scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.Migrate();
 }
 
+if (args.Any(a => string.Equals(a, "seed", StringComparison.OrdinalIgnoreCase)))
+{
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await MockDataSeeder.SeedAsync(dbContext, userCount: 40, minActivitiesPerUser: 1, maxActivitiesPerUser: 200);
+    return;
+}
+
 app.UseDefaultFiles();
 app.MapStaticAssets();
 

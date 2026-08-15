@@ -7,5 +7,7 @@ namespace FitnessApp.Server.Services
         Task<RegisterUserResult> RegisterAsync(RegisterUserRequest request);
 
         Task<UserDto?> GetByIdAsync(string id);
+
+        Task<IReadOnlyList<LeaderboardEntryDto>> GetLeaderboardAsync();
     }
 }

@@ -20,10 +20,14 @@ namespace FitnessApp.Server.Services.Implementation
         {
             var errors = FitnessActivityValidator.ValidateBasicFields(request);
 
-            if (!string.IsNullOrWhiteSpace(request.UserId) &&
-                !await _dbContext.Users.AnyAsync(u => u.Id == request.UserId.Trim()))
+            User? user = null;
+            if (!string.IsNullOrWhiteSpace(request.UserId))
             {
-                errors.Add(FitnessActivityValidator.UserNotFoundError());
+                user = await _dbContext.Users.FindAsync(request.UserId.Trim());
+                if (user is null)
+                {
+                    errors.Add(FitnessActivityValidator.UserNotFoundError());
+                }
             }
 
             var (sportName, sportError) = FitnessActivityValidator.ResolveSportName(request);
@@ -63,6 +67,8 @@ namespace FitnessApp.Server.Services.Implementation
                 Duration = string.IsNullOrWhiteSpace(request.Duration) ? null : request.Duration.Trim(),
                 Points = ActivityScoreCalculator.Calculate(request, sport)
             };
+
+            user!.Points += activity.Points;
 
             _dbContext.FitnessActivities.Add(activity);
             await _dbContext.SaveChangesAsync();
