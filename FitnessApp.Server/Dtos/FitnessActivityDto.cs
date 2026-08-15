@@ -7,5 +7,6 @@ namespace FitnessApp.Server.Dtos
         string Sport,
         int? Steps,
         decimal? Distance,
-        string? Duration);
+        string? Duration,
+        int Points);
 }

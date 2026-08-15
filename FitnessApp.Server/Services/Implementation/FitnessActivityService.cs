@@ -60,7 +60,8 @@ namespace FitnessApp.Server.Services.Implementation
                 Sport = sport,
                 Steps = request.Steps,
                 Distance = request.Distance,
-                Duration = string.IsNullOrWhiteSpace(request.Duration) ? null : request.Duration.Trim()
+                Duration = string.IsNullOrWhiteSpace(request.Duration) ? null : request.Duration.Trim(),
+                Points = ActivityScoreCalculator.Calculate(request, sport)
             };
 
             _dbContext.FitnessActivities.Add(activity);

@@ -20,5 +20,7 @@ namespace FitnessApp.Server.Models
 
         // "minutes:seconds", e.g. "45:30".
         public string? Duration { get; set; }
+
+        public int Points { get; set; }
     }
 }

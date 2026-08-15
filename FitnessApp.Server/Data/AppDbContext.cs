@@ -34,12 +34,12 @@ namespace FitnessApp.Server.Data
                 .IsUnique();
 
             builder.Entity<Sport>().HasData(
-                new Sport { Id = 1, Name = "running", MetricType = SportMetricType.Distance },
-                new Sport { Id = 2, Name = "walking", MetricType = SportMetricType.Distance },
-                new Sport { Id = 3, Name = "cycling", MetricType = SportMetricType.Distance },
-                new Sport { Id = 4, Name = "gym", MetricType = SportMetricType.Duration },
-                new Sport { Id = 5, Name = "swimming", MetricType = SportMetricType.Duration },
-                new Sport { Id = 6, Name = "daily_steps", MetricType = SportMetricType.Count }
+                new Sport { Id = 1, Name = "running", MetricType = SportMetricType.Distance, PointsPerUnit = 100m },
+                new Sport { Id = 2, Name = "walking", MetricType = SportMetricType.Distance, PointsPerUnit = 50m },
+                new Sport { Id = 3, Name = "cycling", MetricType = SportMetricType.Distance, PointsPerUnit = 25m },
+                new Sport { Id = 4, Name = "gym", MetricType = SportMetricType.Duration, PointsPerUnit = 5m },
+                new Sport { Id = 5, Name = "swimming", MetricType = SportMetricType.Duration, PointsPerUnit = 15m },
+                new Sport { Id = 6, Name = "daily_steps", MetricType = SportMetricType.Count, PointsPerUnit = 1m }
             );
         }
     }
