@@ -33,6 +33,21 @@ if (args.Any(a => string.Equals(a, "seed", StringComparison.OrdinalIgnoreCase)))
     return;
 }
 
+// For containers/demo environments where there's no separate step to run the app with
+// `-- seed` before serving traffic: seed on boot instead, but only into an empty database,
+// so it doesn't pile on duplicate mock users if the container restarts against a volume
+// that already has data.
+if (app.Configuration.GetValue<bool>("SEED_DEMO_DATA"))
+{
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    if (!await dbContext.Users.AnyAsync())
+    {
+        app.Logger.LogInformation("SEED_DEMO_DATA is set and the database is empty; seeding demo data.");
+        await MockDataSeeder.SeedAsync(dbContext, userCount: 40, minActivitiesPerUser: 1, maxActivitiesPerUser: 200);
+    }
+}
+
 app.UseDefaultFiles();
 app.MapStaticAssets();
 
