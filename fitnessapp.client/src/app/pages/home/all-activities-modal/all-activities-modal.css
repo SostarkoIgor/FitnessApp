@@ -1,0 +1,128 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 100;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-card__close {
+  border: none;
+  background: var(--card-bg-alt);
+  color: var(--text-muted);
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.modal-card__close:hover {
+  background: var(--border-soft);
+  color: var(--text-strong);
+}
+
+.all-activities-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.35);
+  padding: 2rem;
+}
+
+.all-activities-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.all-activities-card__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--text-strong);
+}
+
+.all-activities-card__status {
+  color: var(--text-muted);
+  font-weight: 700;
+  text-align: center;
+  padding: 1.5rem 0;
+}
+
+.all-activities-card__status--error {
+  color: #dc2626;
+}
+
+.all-activities-card__empty {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.all-activities-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.all-activities-list__row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.all-activities-list__row:last-child {
+  border-bottom: none;
+}
+
+.all-activities-list__sport {
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+.all-activities-list__date {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.all-activities-list__points {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--color-pink);
+}
+
+.all-activities-card__load-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.25rem;
+}
+
+.all-activities-card__load-more-btn {
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: 0.6rem 1.5rem;
+  background: var(--color-violet);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.all-activities-card__load-more-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

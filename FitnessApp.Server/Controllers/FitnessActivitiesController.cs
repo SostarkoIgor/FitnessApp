@@ -41,14 +41,19 @@ namespace FitnessApp.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetByUser([FromQuery] string userId)
+        public async Task<IActionResult> GetByUser([FromQuery] string userId, [FromQuery] int offset = 0, [FromQuery] int limit = 10)
         {
             if (string.IsNullOrWhiteSpace(userId))
             {
                 return BadRequest(new { errors = new[] { "userId query parameter is required." } });
             }
 
-            var activities = await _activityService.GetByUserIdAsync(userId);
+            if (offset < 0 || limit <= 0 || limit > 100)
+            {
+                return BadRequest();
+            }
+
+            var activities = await _activityService.GetByUserIdAsync(userId, offset, limit);
             return Ok(activities);
         }
 

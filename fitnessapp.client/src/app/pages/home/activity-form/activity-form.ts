@@ -1,10 +1,17 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, inject, input, output, signal } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ValidationErrors, Validators } from '@angular/forms';
 
 import { ActivityService } from '../../../core/services/activity';
 import { UserService } from '../../../core/services/user';
 import { ActivityMetric, DAILY_STEPS_SPORT, SPORT_OPTIONS } from '../sport-metadata';
+
+function notInFutureValidator(control: AbstractControl): ValidationErrors | null {
+  if (!control.value) {
+    return null;
+  }
+  return new Date(control.value) > new Date() ? { futureDate: true } : null;
+}
 
 @Component({
   selector: 'app-activity-form',
@@ -27,9 +34,11 @@ export class ActivityForm implements OnInit {
   protected readonly activityErrors = signal<string[]>([]);
   protected readonly activitySuccess = signal(false);
 
+  protected readonly maxDatetime = this.nowLocal();
+
   protected readonly form = this.fb.nonNullable.group({
     sport: ['running', Validators.required],
-    datetime: [this.nowLocal(), Validators.required],
+    datetime: [this.nowLocal(), [Validators.required, notInFutureValidator]],
     distance: this.fb.control<number | null>(null),
     duration: [''],
     steps: this.fb.control<number | null>(null),

@@ -11,6 +11,7 @@
       [user]="u"
       [streak]="stats()?.currentStreak ?? 0"
       (logActivity)="openLogForm()"
+      (viewActivities)="openAllActivities()"
     ></app-summary-banner>
 
     <ng-container *ngIf="!statsLoading() && stats() as s">
@@ -46,3 +47,8 @@
   (closed)="closeLogForm()"
   (activityAdded)="onActivityAdded()"
 ></app-activity-form>
+
+<app-all-activities-modal
+  [open]="showAllActivities()"
+  (closed)="closeAllActivities()"
+></app-all-activities-modal>

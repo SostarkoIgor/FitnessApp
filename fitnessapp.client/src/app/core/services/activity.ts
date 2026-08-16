@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { ActivityDto, ActivityStatsDto, CreateActivityRequest } from '../models/activity.model';
+import { ActivityDto, ActivityPageDto, ActivityStatsDto, CreateActivityRequest } from '../models/activity.model';
 
 @Service()
 export class ActivityService {
@@ -13,8 +13,8 @@ export class ActivityService {
     return this.http.post<ActivityDto>(this.baseUrl, request);
   }
 
-  getByUser(userId: string): Observable<ActivityDto[]> {
-    return this.http.get<ActivityDto[]>(this.baseUrl, { params: { userId } });
+  getByUser(userId: string, offset: number, limit: number): Observable<ActivityPageDto> {
+    return this.http.get<ActivityPageDto>(this.baseUrl, { params: { userId, offset, limit } });
   }
 
   getStats(userId: string, sport?: string): Observable<ActivityStatsDto> {

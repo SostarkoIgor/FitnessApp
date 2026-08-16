@@ -24,6 +24,7 @@ export class Home implements OnInit {
   protected readonly statsLoading = signal(true);
 
   protected readonly showLogForm = signal(false);
+  protected readonly showAllActivities = signal(false);
   protected readonly refreshToken = signal(0);
 
   protected readonly hasActivities = computed(() => (this.stats()?.totalActivities ?? 0) > 0);
@@ -45,6 +46,14 @@ export class Home implements OnInit {
 
   closeLogForm() {
     this.showLogForm.set(false);
+  }
+
+  openAllActivities() {
+    this.showAllActivities.set(true);
+  }
+
+  closeAllActivities() {
+    this.showAllActivities.set(false);
   }
 
   onActivityAdded() {

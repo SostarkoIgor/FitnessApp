@@ -8,7 +8,7 @@ namespace FitnessApp.Server.Services
 
         Task<FitnessActivityDto?> GetByIdAsync(string id);
 
-        Task<IReadOnlyList<FitnessActivityDto>> GetByUserIdAsync(string userId);
+        Task<ActivityPageDto> GetByUserIdAsync(string userId, int offset, int limit);
 
         Task<ActivityStatsDto> GetStatsAsync(string userId, string? sport);
     }

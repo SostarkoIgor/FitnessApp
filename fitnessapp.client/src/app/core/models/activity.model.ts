@@ -28,6 +28,12 @@ export interface SportPointsDto {
   points: number;
 }
 
+export interface ActivityPageDto {
+  entries: ActivityDto[];
+  totalCount: number;
+  hasMore: boolean;
+}
+
 export interface ActivityStatsDto {
   totalActivities: number;
   totalDistance: number;

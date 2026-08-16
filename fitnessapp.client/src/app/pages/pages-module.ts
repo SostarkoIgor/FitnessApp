@@ -8,6 +8,7 @@ import { Leaderboard } from './leaderboard/leaderboard';
 import { Register } from './register/register';
 import { ActivityCalendar } from './home/activity-calendar/activity-calendar';
 import { ActivityForm } from './home/activity-form/activity-form';
+import { AllActivitiesModal } from './home/all-activities-modal/all-activities-modal';
 import { ProgressionChart } from './home/progression-chart/progression-chart';
 import { RecentActivities } from './home/recent-activities/recent-activities';
 import { SportBreakdown } from './home/sport-breakdown/sport-breakdown';
@@ -32,6 +33,7 @@ import { WeeklyChart } from './home/weekly-chart/weekly-chart';
     ActivityForm,
     ActivityCalendar,
     SportStats,
+    AllActivitiesModal,
   ],
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
 })

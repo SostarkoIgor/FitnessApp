@@ -9,6 +9,7 @@
 
   <div class="summary-banner__actions">
     <span class="summary-banner__streak" *ngIf="streak() > 0">{{ streak() }}-day streak</span>
+    <button type="button" class="summary-banner__link-btn" (click)="viewActivities.emit()">View activities</button>
     <a class="summary-banner__link" routerLink="/leaderboard">See global leaderboard →</a>
     <button type="button" class="summary-banner__cta" (click)="logActivity.emit()">+ Log activity</button>
   </div>

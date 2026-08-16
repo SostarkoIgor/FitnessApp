@@ -94,17 +94,26 @@ namespace FitnessApp.Server.Services.Implementation
             return activity?.ToDto();
         }
 
-        public async Task<IReadOnlyList<FitnessActivityDto>> GetByUserIdAsync(string userId)
+        public async Task<ActivityPageDto> GetByUserIdAsync(string userId, int offset, int limit)
         {
             var activities = await _dbContext.FitnessActivities
                 .Include(a => a.Sport)
                 .Where(a => a.UserId == userId)
                 .ToListAsync();
 
-            return activities
+            // Sorted and paged in memory, not via SQL: SQLite can't translate ORDER BY on
+            // DateTimeOffset (see GetStatsAsync), so the query above stays unordered.
+            var ordered = activities
                 .OrderByDescending(a => a.Datetime)
+                .ToList();
+
+            var page = ordered
+                .Skip(offset)
+                .Take(limit)
                 .Select(a => a.ToDto())
                 .ToList();
+
+            return new ActivityPageDto(page, ordered.Count, offset + page.Count < ordered.Count);
         }
 
         public async Task<ActivityStatsDto> GetStatsAsync(string userId, string? sport)

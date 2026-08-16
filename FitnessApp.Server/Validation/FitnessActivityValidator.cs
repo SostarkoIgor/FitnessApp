@@ -29,9 +29,13 @@ namespace FitnessApp.Server.Validation
             }
 
             if (string.IsNullOrWhiteSpace(request.Datetime) ||
-                !DateTimeOffset.TryParse(request.Datetime, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out _))
+                !DateTimeOffset.TryParse(request.Datetime, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var parsedDatetime))
             {
                 errors.Add("datetime is required and must be a valid ISO 8601 date-time string.");
+            }
+            else if (parsedDatetime > DateTimeOffset.UtcNow)
+            {
+                errors.Add("datetime cannot be in the future.");
             }
 
             return errors;

@@ -7,6 +7,7 @@ import { RouterModule, provideRouter } from '@angular/router';
 
 import { ActivityCalendar } from './activity-calendar/activity-calendar';
 import { ActivityForm } from './activity-form/activity-form';
+import { AllActivitiesModal } from './all-activities-modal/all-activities-modal';
 import { Home } from './home';
 import { ProgressionChart } from './progression-chart/progression-chart';
 import { RecentActivities } from './recent-activities/recent-activities';
@@ -35,6 +36,7 @@ describe('Home', () => {
         ActivityForm,
         ActivityCalendar,
         SportStats,
+        AllActivitiesModal,
       ],
       imports: [CommonModule, ReactiveFormsModule, RouterModule],
       providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])],

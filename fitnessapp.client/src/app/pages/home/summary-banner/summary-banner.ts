@@ -13,4 +13,5 @@ export class SummaryBanner {
   readonly streak = input(0);
 
   readonly logActivity = output<void>();
+  readonly viewActivities = output<void>();
 }

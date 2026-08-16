@@ -17,9 +17,10 @@
 
     <label class="field">
       <span class="field__label">When</span>
-      <input class="field__input" type="datetime-local" formControlName="datetime" />
+      <input class="field__input" type="datetime-local" formControlName="datetime" [max]="maxDatetime" />
       <span class="field__error" *ngIf="form.controls.datetime.invalid && form.controls.datetime.touched">
-        Please choose a date and time.
+        <ng-container *ngIf="form.controls.datetime.errors?.['required']">Please choose a date and time.</ng-container>
+        <ng-container *ngIf="form.controls.datetime.errors?.['futureDate']">Date can't be in the future.</ng-container>
       </span>
     </label>
 

@@ -1,0 +1,37 @@
+<div class="modal-backdrop" *ngIf="open()" (click)="close()">
+  <div class="all-activities-card modal-card" (click)="$event.stopPropagation()">
+    <div class="all-activities-card__head">
+      <h2 class="all-activities-card__title">All activities</h2>
+      <button type="button" class="modal-card__close" (click)="close()" aria-label="Close">×</button>
+    </div>
+
+    <div *ngIf="loading()" class="all-activities-card__status">Loading…</div>
+
+    <div *ngIf="!loading() && error()" class="all-activities-card__status all-activities-card__status--error">
+      Couldn't load activities. Please try again later.
+    </div>
+
+    <ng-container *ngIf="!loading() && !error()">
+      <p class="all-activities-card__empty" *ngIf="entries().length === 0">No activities logged yet.</p>
+
+      <ul class="all-activities-list" *ngIf="entries().length">
+        <li class="all-activities-list__row" *ngFor="let activity of entries()">
+          <span class="all-activities-list__sport">{{ sportLabels[activity.sport] ?? activity.sport }}</span>
+          <span class="all-activities-list__date">{{ activity.datetime | date: 'MMM d, y, HH:mm' }}</span>
+          <span class="all-activities-list__points">+{{ activity.points }}</span>
+        </li>
+      </ul>
+
+      <div class="all-activities-card__load-more" *ngIf="hasMore()">
+        <button
+          type="button"
+          class="all-activities-card__load-more-btn"
+          (click)="loadMore()"
+          [disabled]="loadingMore()"
+        >
+          {{ loadingMore() ? 'Loading…' : 'Load more' }}
+        </button>
+      </div>
+    </ng-container>
+  </div>
+</div>

@@ -68,6 +68,25 @@
   border-color: #fff;
 }
 
+.summary-banner__link-btn {
+  border: none;
+  background: none;
+  padding: 0;
+  color: #fff;
+  font-family: var(--font-body);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+  padding-bottom: 2px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.summary-banner__link-btn:hover {
+  border-color: #fff;
+}
+
 .summary-banner__cta {
   padding: 0.75rem 1.5rem;
   border: none;
