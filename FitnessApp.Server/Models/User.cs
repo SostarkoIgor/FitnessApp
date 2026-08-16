@@ -17,5 +17,10 @@ namespace FitnessApp.Server.Models
 
         //I added this, despite a bit of redundancy, to efficiently generate the leaderboard without needing to sum all activities for each user all the time.
         public int Points { get; set; }
+
+        // Current leaderboard position (1 = best), matching UserQueryExtensions.OrderByLeaderboardRank.
+        // Maintained incrementally by RankTrackingService/registration rather than recomputed
+        // from scratch on every read.
+        public int Rank { get; set; }
     }
 }

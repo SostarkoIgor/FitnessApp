@@ -18,6 +18,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IFitnessActivityService, FitnessActivityService>();
 builder.Services.AddScoped<ISportService, SportService>();
+builder.Services.AddScoped<IRankTrackingService, RankTrackingService>();
 
 var app = builder.Build();
 
@@ -30,7 +31,8 @@ if (args.Any(a => string.Equals(a, "seed", StringComparison.OrdinalIgnoreCase)))
 {
     using var scope = app.Services.CreateScope();
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    await MockDataSeeder.SeedAsync(dbContext, userCount: 40, minActivitiesPerUser: 1, maxActivitiesPerUser: 200);
+    var rankTrackingService = scope.ServiceProvider.GetRequiredService<IRankTrackingService>();
+    await MockDataSeeder.SeedAsync(dbContext, rankTrackingService, userCount: 40, minActivitiesPerUser: 1, maxActivitiesPerUser: 200);
     return;
 }
 
@@ -45,7 +47,8 @@ if (app.Configuration.GetValue<bool>("SEED_DEMO_DATA"))
     if (!await dbContext.Users.AnyAsync())
     {
         app.Logger.LogInformation("SEED_DEMO_DATA is set and the database is empty; seeding demo data.");
-        await MockDataSeeder.SeedAsync(dbContext, userCount: 40, minActivitiesPerUser: 1, maxActivitiesPerUser: 200);
+        var rankTrackingService = scope.ServiceProvider.GetRequiredService<IRankTrackingService>();
+        await MockDataSeeder.SeedAsync(dbContext, rankTrackingService, userCount: 40, minActivitiesPerUser: 1, maxActivitiesPerUser: 200);
     }
 }
 

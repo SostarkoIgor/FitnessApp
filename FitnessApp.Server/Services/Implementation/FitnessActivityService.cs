@@ -10,10 +10,12 @@ namespace FitnessApp.Server.Services.Implementation
     public class FitnessActivityService : IFitnessActivityService
     {
         private readonly AppDbContext _dbContext;
+        private readonly IRankTrackingService _rankTrackingService;
 
-        public FitnessActivityService(AppDbContext dbContext)
+        public FitnessActivityService(AppDbContext dbContext, IRankTrackingService rankTrackingService)
         {
             _dbContext = dbContext;
+            _rankTrackingService = rankTrackingService;
         }
 
         public async Task<CreateFitnessActivityResult> CreateAsync(CreateFitnessActivityRequest request)
@@ -74,11 +76,14 @@ namespace FitnessApp.Server.Services.Implementation
 
             await _dbContext.SaveChangesAsync();
 
-            // Atomic UPDATE rather than load-modify-save, so concurrent activity submissions
-            // for the same user can't lose an increment to a race on User.Points.
-            await _dbContext.Users
-                .Where(u => u.Id == activity.UserId)
-                .ExecuteUpdateAsync(s => s.SetProperty(u => u.Points, u => u.Points + activity.Points));
+            // Updates User.Points and, if this changes the leaderboard order, User.Rank for
+            // every user actually passed, plus the RankChangeEvent trail. This whole block
+            // runs inside one transaction, which is what makes it safe against concurrent
+            // submissions on SQLite (a single-writer database serializes concurrent write
+            // transactions), replacing the previous atomic-column-UPDATE-only approach that
+            // was needed specifically because multi-row rank maintenance can't be expressed
+            // as a single ExecuteUpdateAsync call.
+            await _rankTrackingService.RecordPointsEarnedAsync(_dbContext, activity.UserId, activity.Points, DateTimeOffset.UtcNow);
 
             await transaction.CommitAsync();
 

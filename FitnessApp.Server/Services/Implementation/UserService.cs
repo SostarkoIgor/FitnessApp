@@ -12,6 +12,9 @@ namespace FitnessApp.Server.Services.Implementation
     {
         private readonly AppDbContext _dbContext;
 
+        // How far back LeaderboardEntryDto.RankChange looks — see GetRankChangesAsync.
+        private const int RankChangeWindowDays = 15;
+
         public UserService(AppDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -44,11 +47,29 @@ namespace FitnessApp.Server.Services.Implementation
                 NormalizedFullName = normalizedFullName
             };
 
-            _dbContext.Users.Add(user);
+            await using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
             try
             {
+                // A new user starts at 0 points, tied with any other 0-point users and
+                // ordered among them the same way the leaderboard breaks ties (by name) — so
+                // Rank has to be computed once here (mirrors RankTrackingService's ordering)
+                // rather than left at its default, and everyone who now ranks numerically
+                // worse shifts down by one to make room. Runs before the insert so the
+                // shift's Where clause only matches pre-existing users.
+                var betterCount = await _dbContext.Users.CountAsync(u =>
+                    u.Points > 0 ||
+                    (u.Points == 0 && string.Compare(u.LastName, lastName) < 0) ||
+                    (u.Points == 0 && u.LastName == lastName && string.Compare(u.FirstName, firstName) < 0));
+                user.Rank = betterCount + 1;
+
+                await _dbContext.Users
+                    .Where(u => u.Rank >= user.Rank)
+                    .ExecuteUpdateAsync(s => s.SetProperty(u => u.Rank, u => u.Rank + 1));
+
+                _dbContext.Users.Add(user);
                 await _dbContext.SaveChangesAsync();
+                await transaction.CommitAsync();
             }
             catch (DbUpdateException ex) when (IsUniqueNameViolation(ex))
             {
@@ -87,11 +108,34 @@ namespace FitnessApp.Server.Services.Implementation
                 .Take(limit)
                 .ToListAsync();
 
+            var rankChanges = await GetRankChangesAsync(page.Select(u => u.Id).ToList());
+
             var entries = page
-                .Select((u, i) => new LeaderboardEntryDto(offset + i + 1, u.Id, u.FirstName, u.LastName, u.Points))
+                .Select((u, i) => new LeaderboardEntryDto(
+                    offset + i + 1, u.Id, u.FirstName, u.LastName, u.Points, rankChanges.GetValueOrDefault(u.Id)))
                 .ToList();
 
             return new LeaderboardPageDto(entries, totalCount, offset + entries.Count < totalCount);
+        }
+
+        // Net sum of RankChangeEvent.Delta per user over the trailing window — see LeaderboardEntryDto.
+        // The OccurredAt (DateTimeOffset) filter and the GroupBy both stay client-side rather
+        // than in SQL: SQLite can't translate a DateTimeOffset comparison combined with the
+        // Contains predicate here (same family of limitation as GetStatsAsync's ORDER BY
+        // note), and events per requested user are few enough that fetching by id alone and
+        // filtering/grouping in memory is cheap.
+        private async Task<Dictionary<string, int>> GetRankChangesAsync(List<string> userIds)
+        {
+            var since = DateTimeOffset.UtcNow.AddDays(-RankChangeWindowDays);
+
+            var events = await _dbContext.RankChangeEvents
+                .Where(e => userIds.Contains(e.UserId))
+                .ToListAsync();
+
+            return events
+                .Where(e => e.OccurredAt >= since)
+                .GroupBy(e => e.UserId)
+                .ToDictionary(g => g.Key, g => g.Sum(e => e.Delta));
         }
 
         public async Task<IReadOnlyList<LeaderboardEntryDto>?> GetLeaderboardAroundUserAsync(string userId)
@@ -122,8 +166,11 @@ namespace FitnessApp.Server.Services.Implementation
                 .Take(take)
                 .ToListAsync();
 
+            var rankChanges = await GetRankChangesAsync(window.Select(u => u.Id).ToList());
+
             return window
-                .Select((u, i) => new LeaderboardEntryDto(start + i, u.Id, u.FirstName, u.LastName, u.Points))
+                .Select((u, i) => new LeaderboardEntryDto(
+                    start + i, u.Id, u.FirstName, u.LastName, u.Points, rankChanges.GetValueOrDefault(u.Id)))
                 .ToList();
         }
     }

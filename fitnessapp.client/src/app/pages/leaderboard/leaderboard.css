@@ -108,8 +108,9 @@
 
 .leaderboard__row {
   display: grid;
-  grid-template-columns: 2.5rem 1fr auto;
+  grid-template-columns: 2.5rem 1fr auto auto;
   align-items: center;
+  gap: 0.75rem;
   padding: 0.85rem 1.25rem;
   border-bottom: 1px solid var(--border-soft);
 }
@@ -137,6 +138,29 @@
   font-family: var(--font-display);
   font-weight: 600;
   color: var(--color-pink);
+}
+
+.leaderboard__change {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.leaderboard__change--up {
+  color: #16a34a;
+}
+
+.leaderboard__change--down {
+  color: #dc2626;
+}
+
+.podium__place .leaderboard__change {
+  margin-top: 0.35rem;
+  background: rgba(255, 255, 255, 0.25);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  color: #fff;
 }
 
 .leaderboard__load-more {

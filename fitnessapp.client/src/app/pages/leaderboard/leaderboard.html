@@ -20,6 +20,11 @@
         <span class="podium__medal">{{ i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉' }}</span>
         <span class="podium__name">{{ entry.firstName }} {{ entry.lastName }}</span>
         <span class="podium__points">{{ entry.points }} pts</span>
+        <span
+          class="leaderboard__change"
+          [class.leaderboard__change--up]="entry.rankChange > 0"
+          [class.leaderboard__change--down]="entry.rankChange < 0"
+        >{{ entry.rankChange > 0 ? '▲' + entry.rankChange : entry.rankChange < 0 ? '▼' + (-entry.rankChange) : '–' }}</span>
       </div>
     </div>
 
@@ -31,6 +36,11 @@
       >
         <span class="leaderboard__rank">{{ entry.rank }}</span>
         <span class="leaderboard__name">{{ entry.firstName }} {{ entry.lastName }}</span>
+        <span
+          class="leaderboard__change"
+          [class.leaderboard__change--up]="entry.rankChange > 0"
+          [class.leaderboard__change--down]="entry.rankChange < 0"
+        >{{ entry.rankChange > 0 ? '▲' + entry.rankChange : entry.rankChange < 0 ? '▼' + (-entry.rankChange) : '–' }}</span>
         <span class="leaderboard__points">{{ entry.points }}</span>
       </li>
     </ol>
@@ -51,6 +61,11 @@
         >
           <span class="leaderboard__rank">{{ entry.rank }}</span>
           <span class="leaderboard__name">{{ entry.firstName }} {{ entry.lastName }}</span>
+          <span
+            class="leaderboard__change"
+            [class.leaderboard__change--up]="entry.rankChange > 0"
+            [class.leaderboard__change--down]="entry.rankChange < 0"
+          >{{ entry.rankChange > 0 ? '▲' + entry.rankChange : entry.rankChange < 0 ? '▼' + (-entry.rankChange) : '–' }}</span>
           <span class="leaderboard__points">{{ entry.points }}</span>
         </li>
       </ol>

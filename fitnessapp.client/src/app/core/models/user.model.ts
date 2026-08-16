@@ -11,6 +11,7 @@ export interface LeaderboardEntryDto {
   firstName: string;
   lastName: string;
   points: number;
+  rankChange: number;
 }
 
 export interface LeaderboardPageDto {

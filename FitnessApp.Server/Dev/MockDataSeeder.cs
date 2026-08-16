@@ -27,6 +27,7 @@ namespace FitnessApp.Server.Dev
 
         public static async Task SeedAsync(
             AppDbContext dbContext,
+            IRankTrackingService rankTrackingService,
             int userCount,
             int minActivitiesPerUser,
             int maxActivitiesPerUser,
@@ -78,6 +79,19 @@ namespace FitnessApp.Server.Dev
                     $"Only found {users.Count} unique name combinations for {userCount} requested users; expand the name pools.");
             }
 
+            // Every seeded user starts tied at 0 points, so their initial Rank is just the
+            // same (LastName, FirstName) tie-break the leaderboard itself uses — matching
+            // what RankTrackingService/registration would produce for an all-zero population,
+            // so the chronological replay below starts from a correct invariant.
+            var rankedUsers = users
+                .OrderBy(u => u.LastName, StringComparer.Ordinal)
+                .ThenBy(u => u.FirstName, StringComparer.Ordinal)
+                .ToList();
+            for (var i = 0; i < rankedUsers.Count; i++)
+            {
+                rankedUsers[i].Rank = i + 1;
+            }
+
             dbContext.Users.AddRange(users);
             await dbContext.SaveChangesAsync();
 
@@ -126,13 +140,23 @@ namespace FitnessApp.Server.Dev
                         Duration = request.Duration,
                         Points = points
                     });
-
-                    user.Points += points;
                 }
             }
 
             dbContext.FitnessActivities.AddRange(activities);
             await dbContext.SaveChangesAsync();
+
+            // Points/Rank/RankChangeEvent are not set above — they're derived by replaying
+            // every seeded activity through the exact same logic a live submission uses, in
+            // the order it actually happened. This is what makes the seeded RankChangeEvent
+            // trail a real, internally consistent simulation of the whole window (not
+            // fabricated data that could disagree with the seeded totals), and it's the only
+            // way "the app has been running for a while" can be true for the new leaderboard
+            // trend indicator too.
+            foreach (var activity in activities.OrderBy(a => a.Datetime))
+            {
+                await rankTrackingService.RecordPointsEarnedAsync(dbContext, activity.UserId, activity.Points, activity.Datetime);
+            }
         }
     }
 }

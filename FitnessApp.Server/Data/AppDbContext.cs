@@ -16,6 +16,8 @@ namespace FitnessApp.Server.Data
 
         public DbSet<Sport> Sports => Set<Sport>();
 
+        public DbSet<RankChangeEvent> RankChangeEvents => Set<RankChangeEvent>();
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -33,6 +35,15 @@ namespace FitnessApp.Server.Data
             builder.Entity<Sport>()
                 .HasIndex(s => s.Name)
                 .IsUnique();
+
+            builder.Entity<RankChangeEvent>()
+                .HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<RankChangeEvent>()
+                .HasIndex(e => new { e.UserId, e.OccurredAt });
 
             builder.Entity<Sport>().HasData(
                 new Sport { Id = 1, Name = "running", MetricType = SportMetricType.Distance, PointsPerUnit = 100m },
