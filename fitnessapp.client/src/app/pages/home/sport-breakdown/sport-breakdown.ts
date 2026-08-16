@@ -1,6 +1,6 @@
 import { Component, computed, input } from '@angular/core';
 
-import { ActivityDto } from '../../../core/models/activity.model';
+import { SportPointsDto } from '../../../core/models/activity.model';
 import { SPORT_COLORS, SPORT_LABELS } from '../sport-metadata';
 
 interface SportSegment {
@@ -20,33 +20,27 @@ interface SportSegment {
   styleUrl: './sport-breakdown.css',
 })
 export class SportBreakdown {
-  readonly activities = input<ActivityDto[]>([]);
+  readonly breakdown = input<SportPointsDto[]>([]);
 
   protected readonly sportBreakdown = computed<SportSegment[]>(() => {
-    const totals = new Map<string, number>();
-    for (const activity of this.activities()) {
-      totals.set(activity.sport, (totals.get(activity.sport) ?? 0) + activity.points);
-    }
-
-    const totalPoints = [...totals.values()].reduce((sum, value) => sum + value, 0);
+    const entries = this.breakdown();
+    const totalPoints = entries.reduce((sum, entry) => sum + entry.points, 0);
 
     let cursor = 0;
-    return [...totals.entries()]
-      .sort((a, b) => b[1] - a[1])
-      .map(([sport, points]) => {
-        const pct = totalPoints > 0 ? (points / totalPoints) * 100 : 0;
-        const start = cursor;
-        cursor += pct;
-        return {
-          sport,
-          label: SPORT_LABELS[sport] ?? sport,
-          points,
-          pct,
-          start,
-          end: cursor,
-          color: SPORT_COLORS[sport] ?? '#8892a6',
-        };
-      });
+    return entries.map(({ sport, points }) => {
+      const pct = totalPoints > 0 ? (points / totalPoints) * 100 : 0;
+      const start = cursor;
+      cursor += pct;
+      return {
+        sport,
+        label: SPORT_LABELS[sport] ?? sport,
+        points,
+        pct,
+        start,
+        end: cursor,
+        color: SPORT_COLORS[sport] ?? '#8892a6',
+      };
+    });
   });
 
   protected readonly pieBackground = computed(() => {

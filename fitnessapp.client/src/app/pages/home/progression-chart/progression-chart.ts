@@ -1,13 +1,14 @@
 import { Component, computed, input } from '@angular/core';
 
-import { ActivityDto } from '../../../core/models/activity.model';
+import { DailyPointsDto } from '../../../core/models/activity.model';
+import { parseDateOnly } from '../day-key';
 
 const CHART_WIDTH = 280;
 const CHART_HEIGHT = 120;
 const CHART_PADDING = 8;
 
 interface ProgressionPoint {
-  datetime: string;
+  date: string;
   cumulative: number;
 }
 
@@ -23,17 +24,13 @@ interface ProgressionLabel {
   styleUrl: './progression-chart.css',
 })
 export class ProgressionChart {
-  readonly activities = input<ActivityDto[]>([]);
+  readonly dailyPoints = input<DailyPointsDto[]>([]);
 
   protected readonly progression = computed<ProgressionPoint[]>(() => {
-    const sorted = [...this.activities()].sort(
-      (a, b) => new Date(a.datetime).getTime() - new Date(b.datetime).getTime(),
-    );
-
     let cumulative = 0;
-    return sorted.map((activity) => {
-      cumulative += activity.points;
-      return { datetime: activity.datetime, cumulative };
+    return this.dailyPoints().map((day) => {
+      cumulative += day.points;
+      return { date: day.date, cumulative };
     });
   });
 
@@ -67,11 +64,11 @@ export class ProgressionChart {
       return [];
     }
 
-    const format = (iso: string) =>
-      new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    const format = (isoDate: string) =>
+      parseDateOnly(isoDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 
     if (points.length === 1) {
-      return [{ pct: 50, text: format(points[0].datetime) }];
+      return [{ pct: 50, text: format(points[0].date) }];
     }
 
     const indices =
@@ -81,7 +78,7 @@ export class ProgressionChart {
 
     return indices.map((i) => ({
       pct: (i / (points.length - 1)) * 100,
-      text: format(points[i].datetime),
+      text: format(points[i].date),
     }));
   });
 }

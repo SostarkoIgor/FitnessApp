@@ -9,20 +9,30 @@
     <app-summary-banner
       *ngIf="user() as u"
       [user]="u"
-      [streak]="currentStreak()"
+      [streak]="stats()?.currentStreak ?? 0"
       (logActivity)="openLogForm()"
     ></app-summary-banner>
 
-    <ng-container *ngIf="!statsLoading()">
+    <ng-container *ngIf="!statsLoading() && stats() as s">
       <div class="home__grid" *ngIf="hasActivities()">
-        <app-stat-tiles [activities]="activities()"></app-stat-tiles>
-        <app-progression-chart [activities]="activities()"></app-progression-chart>
-        <app-sport-breakdown [activities]="activities()"></app-sport-breakdown>
-        <app-weekly-chart [activities]="activities()"></app-weekly-chart>
-        <app-recent-activities [activities]="activities()"></app-recent-activities>
+        <app-stat-tiles
+          [totalActivities]="s.totalActivities"
+          [totalDistance]="s.totalDistance"
+          [averagePoints]="s.averagePoints"
+          [topSport]="s.topSport"
+          [bestDay]="s.bestDay"
+        ></app-stat-tiles>
+        <app-progression-chart [dailyPoints]="s.dailyPointsSeries"></app-progression-chart>
+        <app-sport-breakdown [breakdown]="s.sportBreakdown"></app-sport-breakdown>
+        <app-weekly-chart [last7Days]="s.last7Days"></app-weekly-chart>
+        <app-recent-activities [recent]="s.recentActivities"></app-recent-activities>
       </div>
 
-      <app-sport-detail *ngIf="hasActivities()" [activities]="activities()"></app-sport-detail>
+      <app-sport-detail
+        *ngIf="hasActivities()"
+        [sportChoices]="sportChoices()"
+        [refreshToken]="refreshToken()"
+      ></app-sport-detail>
 
       <p class="stats__empty" *ngIf="!hasActivities()">
         Log your first activity to start seeing your stats here.

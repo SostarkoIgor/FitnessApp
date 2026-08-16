@@ -1,10 +1,10 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 
 import { ActivityService } from '../../core/services/activity';
-import { ActivityDto } from '../../core/models/activity.model';
+import { ActivityStatsDto } from '../../core/models/activity.model';
 import { UserDto } from '../../core/models/user.model';
 import { UserService } from '../../core/services/user';
-import { dayKey } from './day-key';
+import { SPORT_LABELS } from './sport-metadata';
 
 @Component({
   selector: 'app-home',
@@ -20,32 +20,20 @@ export class Home implements OnInit {
   protected readonly loading = signal(true);
   protected readonly error = signal(false);
 
-  protected readonly activities = signal<ActivityDto[]>([]);
+  protected readonly stats = signal<ActivityStatsDto | null>(null);
   protected readonly statsLoading = signal(true);
 
   protected readonly showLogForm = signal(false);
+  protected readonly refreshToken = signal(0);
 
-  protected readonly hasActivities = computed(() => this.activities().length > 0);
+  protected readonly hasActivities = computed(() => (this.stats()?.totalActivities ?? 0) > 0);
 
-  protected readonly currentStreak = computed(() => {
-    const days = new Set(this.activities().map((a) => dayKey(new Date(a.datetime))));
-    if (days.size === 0) {
-      return 0;
-    }
-
-    const cursor = new Date();
-    cursor.setHours(0, 0, 0, 0);
-    if (!days.has(dayKey(cursor))) {
-      cursor.setDate(cursor.getDate() - 1);
-    }
-
-    let streak = 0;
-    while (days.has(dayKey(cursor))) {
-      streak++;
-      cursor.setDate(cursor.getDate() - 1);
-    }
-    return streak;
-  });
+  protected readonly sportChoices = computed(() =>
+    (this.stats()?.sportBreakdown ?? []).map(({ sport }) => ({
+      value: sport,
+      label: SPORT_LABELS[sport] ?? sport,
+    })),
+  );
 
   ngOnInit() {
     this.loadUser();
@@ -61,6 +49,7 @@ export class Home implements OnInit {
 
   onActivityAdded() {
     this.loadUser();
+    this.refreshToken.update((token) => token + 1);
   }
 
   private loadUser() {
@@ -83,9 +72,9 @@ export class Home implements OnInit {
       },
     });
 
-    this.activityService.getByUser(userId).subscribe({
-      next: (activities) => {
-        this.activities.set(activities);
+    this.activityService.getStats(userId).subscribe({
+      next: (stats) => {
+        this.stats.set(stats);
         this.statsLoading.set(false);
       },
       error: () => {

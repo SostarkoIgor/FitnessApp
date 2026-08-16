@@ -15,7 +15,7 @@
     <span class="stat-tile__value stat-tile__value--sport">{{ top }}</span>
     <span class="stat-tile__label">Top sport</span>
   </div>
-  <div class="stat-tile" *ngIf="bestDay() as best">
+  <div class="stat-tile" *ngIf="bestDayDisplay() as best">
     <span class="stat-tile__value">{{ best.points }}</span>
     <span class="stat-tile__label">Best day · {{ best.date | date: 'MMM d' }}</span>
   </div>

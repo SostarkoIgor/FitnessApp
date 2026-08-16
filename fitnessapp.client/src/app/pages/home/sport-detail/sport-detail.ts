@@ -1,7 +1,8 @@
-import { Component, computed, input, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, signal } from '@angular/core';
 
-import { ActivityDto } from '../../../core/models/activity.model';
-import { SPORT_LABELS } from '../sport-metadata';
+import { ActivityStatsDto } from '../../../core/models/activity.model';
+import { ActivityService } from '../../../core/services/activity';
+import { UserService } from '../../../core/services/user';
 
 interface SportChoice {
   value: string;
@@ -15,31 +16,53 @@ interface SportChoice {
   styleUrl: './sport-detail.css',
 })
 export class SportDetail {
-  readonly activities = input<ActivityDto[]>([]);
+  private readonly activityService = inject(ActivityService);
+  private readonly userService = inject(UserService);
+
+  readonly sportChoices = input<SportChoice[]>([]);
+  readonly refreshToken = input(0);
 
   protected readonly selectedSport = signal<string | null>(null);
-
-  protected readonly sportChoices = computed<SportChoice[]>(() => {
-    const totals = new Map<string, number>();
-    for (const activity of this.activities()) {
-      totals.set(activity.sport, (totals.get(activity.sport) ?? 0) + 1);
-    }
-
-    return [...totals.entries()]
-      .sort((a, b) => b[1] - a[1])
-      .map(([sport]) => ({ value: sport, label: SPORT_LABELS[sport] ?? sport }));
-  });
 
   protected readonly activeSport = computed(
     () => this.selectedSport() ?? this.sportChoices()[0]?.value ?? null,
   );
 
-  protected readonly filteredActivities = computed(() => {
-    const sport = this.activeSport();
-    return sport ? this.activities().filter((activity) => activity.sport === sport) : [];
-  });
+  protected readonly stats = signal<ActivityStatsDto | null>(null);
+  protected readonly loading = signal(false);
+  protected readonly error = signal(false);
+
+  constructor() {
+    effect(() => {
+      const sport = this.activeSport();
+      this.refreshToken();
+      this.loadStats(sport);
+    });
+  }
 
   selectSport(sport: string) {
     this.selectedSport.set(sport);
+  }
+
+  private loadStats(sport: string | null) {
+    const userId = this.userService.getStoredUserId();
+    if (!sport || !userId) {
+      this.stats.set(null);
+      return;
+    }
+
+    this.loading.set(true);
+    this.error.set(false);
+
+    this.activityService.getStats(userId, sport).subscribe({
+      next: (stats) => {
+        this.stats.set(stats);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+        this.error.set(true);
+      },
+    });
   }
 }

@@ -41,6 +41,17 @@
   border-color: var(--color-violet);
 }
 
+.sport-detail-card__status {
+  color: var(--text-muted);
+  font-weight: 700;
+  text-align: center;
+  padding: 1.5rem 0;
+}
+
+.sport-detail-card__status--error {
+  color: #dc2626;
+}
+
 .sport-detail-card__grid {
   display: grid;
   gap: 1.5rem;

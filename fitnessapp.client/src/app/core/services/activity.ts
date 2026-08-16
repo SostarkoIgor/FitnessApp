@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { ActivityDto, CreateActivityRequest } from '../models/activity.model';
+import { ActivityDto, ActivityStatsDto, CreateActivityRequest } from '../models/activity.model';
 
 @Service()
 export class ActivityService {
@@ -15,5 +15,10 @@ export class ActivityService {
 
   getByUser(userId: string): Observable<ActivityDto[]> {
     return this.http.get<ActivityDto[]>(this.baseUrl, { params: { userId } });
+  }
+
+  getStats(userId: string, sport?: string): Observable<ActivityStatsDto> {
+    const params: Record<string, string> = sport ? { userId, sport } : { userId };
+    return this.http.get<ActivityStatsDto>(`${this.baseUrl}/stats`, { params });
   }
 }

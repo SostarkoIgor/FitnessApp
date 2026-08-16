@@ -17,17 +17,14 @@ interface RecentActivityRow {
   styleUrl: './recent-activities.css',
 })
 export class RecentActivities {
-  readonly activities = input<ActivityDto[]>([]);
+  readonly recent = input<ActivityDto[]>([]);
 
   protected readonly recentActivities = computed<RecentActivityRow[]>(() =>
-    [...this.activities()]
-      .sort((a, b) => new Date(b.datetime).getTime() - new Date(a.datetime).getTime())
-      .slice(0, 6)
-      .map((activity) => ({
-        id: activity.id,
-        label: SPORT_LABELS[activity.sport] ?? activity.sport,
-        datetime: activity.datetime,
-        points: activity.points,
-      })),
+    this.recent().map((activity) => ({
+      id: activity.id,
+      label: SPORT_LABELS[activity.sport] ?? activity.sport,
+      datetime: activity.datetime,
+      points: activity.points,
+    })),
   );
 }

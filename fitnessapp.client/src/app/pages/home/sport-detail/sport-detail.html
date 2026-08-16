@@ -10,10 +10,21 @@
     </select>
   </div>
 
-  <div class="sport-detail-card__grid">
-    <app-progression-chart [activities]="filteredActivities()"></app-progression-chart>
-    <app-weekly-chart [activities]="filteredActivities()"></app-weekly-chart>
-    <app-activity-calendar [activities]="filteredActivities()"></app-activity-calendar>
-    <app-sport-stats [activities]="filteredActivities()"></app-sport-stats>
+  <div *ngIf="loading()" class="sport-detail-card__status">Loading…</div>
+
+  <div *ngIf="!loading() && error()" class="sport-detail-card__status sport-detail-card__status--error">
+    Couldn't load stats for this sport. Please try again later.
+  </div>
+
+  <div class="sport-detail-card__grid" *ngIf="!loading() && !error() && stats() as s">
+    <app-progression-chart [dailyPoints]="s.dailyPointsSeries"></app-progression-chart>
+    <app-weekly-chart [last7Days]="s.last7Days"></app-weekly-chart>
+    <app-activity-calendar [activeDayKeys]="s.activeDayKeys"></app-activity-calendar>
+    <app-sport-stats
+      [totalSessions]="s.totalActivities"
+      [totalPoints]="s.totalPoints"
+      [bestSession]="s.bestSessionPoints"
+      [currentStreak]="s.currentStreak"
+    ></app-sport-stats>
   </div>
 </div>

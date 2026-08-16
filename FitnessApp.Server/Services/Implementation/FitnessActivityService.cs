@@ -106,5 +106,24 @@ namespace FitnessApp.Server.Services.Implementation
                 .Select(a => a.ToDto())
                 .ToList();
         }
+
+        public async Task<ActivityStatsDto> GetStatsAsync(string userId, string? sport)
+        {
+            var query = _dbContext.FitnessActivities.Where(a => a.UserId == userId);
+
+            if (!string.IsNullOrWhiteSpace(sport))
+            {
+                query = query.Where(a => a.Sport.Name == sport);
+            }
+
+            // Sorting by Datetime (DateTimeOffset) isn't done in the query itself: SQLite can't
+            // translate ORDER BY on that type, so it stays unordered here and gets sorted where
+            // needed (e.g. RecentActivities) after materializing, same as GetByUserIdAsync above.
+            var activities = await query
+                .Select(a => new FitnessActivityDto(a.Id, a.UserId, a.Datetime, a.Sport.Name, a.Steps, a.Distance, a.Duration, a.Points))
+                .ToListAsync();
+
+            return ActivityStatsCalculator.Calculate(activities);
+        }
     }
 }

@@ -51,5 +51,17 @@ namespace FitnessApp.Server.Controllers
             var activities = await _activityService.GetByUserIdAsync(userId);
             return Ok(activities);
         }
+
+        [HttpGet("stats")]
+        public async Task<IActionResult> GetStats([FromQuery] string userId, [FromQuery] string? sport = null)
+        {
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return BadRequest(new { errors = new[] { "userId query parameter is required." } });
+            }
+
+            var stats = await _activityService.GetStatsAsync(userId, sport);
+            return Ok(stats);
+        }
     }
 }
