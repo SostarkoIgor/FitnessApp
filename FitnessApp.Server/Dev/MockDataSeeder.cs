@@ -1,9 +1,10 @@
+using FitnessApp.Server.Data;
 using FitnessApp.Server.Dtos;
 using FitnessApp.Server.Models;
 using FitnessApp.Server.Services;
 using Microsoft.EntityFrameworkCore;
 
-namespace FitnessApp.Server.Data
+namespace FitnessApp.Server.Dev
 {
     // Dev-only mock data generator, triggered via `dotnet run -- seed`. Reuses
     // ActivityScoreCalculator so seeded points stay consistent with real requests.

@@ -1,4 +1,5 @@
 using FitnessApp.Server.Data;
+using FitnessApp.Server.Dev;
 using FitnessApp.Server.Services;
 using FitnessApp.Server.Services.Implementation;
 using Microsoft.EntityFrameworkCore;
@@ -16,8 +17,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IFitnessActivityService, FitnessActivityService>();
-
-builder.Services.AddControllers();
 
 var app = builder.Build();
 

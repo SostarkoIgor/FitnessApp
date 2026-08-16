@@ -119,11 +119,9 @@ namespace FitnessApp.Server.Validation
                     break;
 
                 case SportMetricType.Count:
-                    if (!hasSteps)
-                    {
-                        errors.Add("steps is required when sport is not provided.");
-                    }
-                    else if (request.Steps <= 0)
+                    // hasSteps is always true here: ResolveSportName only resolves to the
+                    // Count-metric sport (daily_steps) when request.Steps has a value.
+                    if (request.Steps <= 0)
                     {
                         errors.Add("steps must be a positive integer.");
                     }

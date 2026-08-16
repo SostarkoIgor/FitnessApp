@@ -68,10 +68,19 @@ namespace FitnessApp.Server.Services.Implementation
                 Points = ActivityScoreCalculator.Calculate(request, sport)
             };
 
-            user!.Points += activity.Points;
-
             _dbContext.FitnessActivities.Add(activity);
+
+            await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+
             await _dbContext.SaveChangesAsync();
+
+            // Atomic UPDATE rather than load-modify-save, so concurrent activity submissions
+            // for the same user can't lose an increment to a race on User.Points.
+            await _dbContext.Users
+                .Where(u => u.Id == activity.UserId)
+                .ExecuteUpdateAsync(s => s.SetProperty(u => u.Points, u => u.Points + activity.Points));
+
+            await transaction.CommitAsync();
 
             return CreateFitnessActivityResult.Success(activity.ToDto());
         }
