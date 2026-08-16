@@ -3,8 +3,9 @@ import { Component, OnInit, inject, input, output, signal } from '@angular/core'
 import { AbstractControl, FormBuilder, ValidationErrors, Validators } from '@angular/forms';
 
 import { ActivityService } from '../../../core/services/activity';
+import { SportService } from '../../../core/services/sport';
 import { UserService } from '../../../core/services/user';
-import { ActivityMetric, DAILY_STEPS_SPORT, SPORT_OPTIONS } from '../sport-metadata';
+import { ActivityMetric, DAILY_STEPS_SPORT, SportOption, sportLabel, toActivityMetric } from '../sport-display';
 
 function notInFutureValidator(control: AbstractControl): ValidationErrors | null {
   if (!control.value) {
@@ -22,13 +23,17 @@ function notInFutureValidator(control: AbstractControl): ValidationErrors | null
 export class ActivityForm implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly activityService = inject(ActivityService);
+  private readonly sportService = inject(SportService);
   private readonly userService = inject(UserService);
+
+  protected readonly sportOptions = signal<SportOption[]>([]);
+  protected readonly sportsLoading = signal(true);
+  protected readonly sportsError = signal(false);
 
   readonly open = input(false);
   readonly closed = output<void>();
   readonly activityAdded = output<void>();
 
-  protected readonly sportOptions = SPORT_OPTIONS;
   protected readonly selectedMetric = signal<ActivityMetric>('distance');
   protected readonly submittingActivity = signal(false);
   protected readonly activityErrors = signal<string[]>([]);
@@ -37,7 +42,7 @@ export class ActivityForm implements OnInit {
   protected readonly maxDatetime = this.nowLocal();
 
   protected readonly form = this.fb.nonNullable.group({
-    sport: ['running', Validators.required],
+    sport: ['', Validators.required],
     datetime: [this.nowLocal(), [Validators.required, notInFutureValidator]],
     distance: this.fb.control<number | null>(null),
     duration: [''],
@@ -46,7 +51,26 @@ export class ActivityForm implements OnInit {
 
   ngOnInit() {
     this.form.controls.sport.valueChanges.subscribe((sport) => this.applyMetricValidators(sport));
-    this.applyMetricValidators(this.form.controls.sport.value);
+
+    this.sportService.getAll().subscribe({
+      next: (sports) => {
+        const options = sports.map((sport) => ({
+          value: sport.name,
+          label: sportLabel(sport.name),
+          metric: toActivityMetric(sport.metricType),
+        }));
+        this.sportOptions.set(options);
+        this.sportsLoading.set(false);
+
+        const defaultSport = options[0]?.value ?? '';
+        this.form.controls.sport.setValue(defaultSport);
+        this.applyMetricValidators(defaultSport);
+      },
+      error: () => {
+        this.sportsLoading.set(false);
+        this.sportsError.set(true);
+      },
+    });
   }
 
   close() {
@@ -100,7 +124,7 @@ export class ActivityForm implements OnInit {
   }
 
   private applyMetricValidators(sport: string) {
-    const metric = SPORT_OPTIONS.find((option) => option.value === sport)?.metric ?? 'distance';
+    const metric = this.sportOptions().find((option) => option.value === sport)?.metric ?? 'distance';
     this.selectedMetric.set(metric);
 
     const { distance, duration, steps } = this.form.controls;

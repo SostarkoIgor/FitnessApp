@@ -17,6 +17,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IFitnessActivityService, FitnessActivityService>();
+builder.Services.AddScoped<ISportService, SportService>();
 
 var app = builder.Build();
 

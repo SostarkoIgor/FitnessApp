@@ -1,11 +1,18 @@
-import { Component, effect, inject, input, output, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
 
 import { ActivityDto } from '../../../core/models/activity.model';
 import { ActivityService } from '../../../core/services/activity';
 import { UserService } from '../../../core/services/user';
-import { SPORT_LABELS } from '../sport-metadata';
+import { sportLabel } from '../sport-display';
 
 const PAGE_SIZE = 10;
+
+interface ActivityRow {
+  id: string;
+  label: string;
+  datetime: string;
+  points: number;
+}
 
 @Component({
   selector: 'app-all-activities-modal',
@@ -27,7 +34,14 @@ export class AllActivitiesModal {
   protected readonly error = signal(false);
   protected readonly hasMore = signal(false);
 
-  protected readonly sportLabels = SPORT_LABELS;
+  protected readonly rows = computed<ActivityRow[]>(() =>
+    this.entries().map((activity) => ({
+      id: activity.id,
+      label: sportLabel(activity.sport),
+      datetime: activity.datetime,
+      points: activity.points,
+    })),
+  );
 
   constructor() {
     effect(() => {

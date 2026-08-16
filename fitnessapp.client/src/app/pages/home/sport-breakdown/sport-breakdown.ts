@@ -1,7 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 
 import { SportPointsDto } from '../../../core/models/activity.model';
-import { SPORT_COLORS, SPORT_LABELS } from '../sport-metadata';
+import { DEFAULT_SPORT_COLOR, buildSportColorMap, sportLabel } from '../sport-display';
 
 interface SportSegment {
   sport: string;
@@ -22,9 +22,17 @@ interface SportSegment {
 export class SportBreakdown {
   readonly breakdown = input<SportPointsDto[]>([]);
 
+  // The canonical, stably-ordered sport list (see SportService) — used only to
+  // assign each sport a stable color by position, never to filter/order the
+  // breakdown itself (that stays driven by `breakdown`'s own points-desc order).
+  readonly sportOrder = input<string[]>([]);
+
+  private readonly colorMap = computed(() => buildSportColorMap(this.sportOrder()));
+
   protected readonly sportBreakdown = computed<SportSegment[]>(() => {
     const entries = this.breakdown();
     const totalPoints = entries.reduce((sum, entry) => sum + entry.points, 0);
+    const colorMap = this.colorMap();
 
     let cursor = 0;
     return entries.map(({ sport, points }) => {
@@ -33,12 +41,12 @@ export class SportBreakdown {
       cursor += pct;
       return {
         sport,
-        label: SPORT_LABELS[sport] ?? sport,
+        label: sportLabel(sport),
         points,
         pct,
         start,
         end: cursor,
-        color: SPORT_COLORS[sport] ?? '#8892a6',
+        color: colorMap.get(sport) ?? DEFAULT_SPORT_COLOR,
       };
     });
   });

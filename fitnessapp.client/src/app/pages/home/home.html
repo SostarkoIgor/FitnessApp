@@ -24,7 +24,7 @@
           [bestDay]="s.bestDay"
         ></app-stat-tiles>
         <app-progression-chart [dailyPoints]="s.dailyPointsSeries"></app-progression-chart>
-        <app-sport-breakdown [breakdown]="s.sportBreakdown"></app-sport-breakdown>
+        <app-sport-breakdown [breakdown]="s.sportBreakdown" [sportOrder]="sportOrder()"></app-sport-breakdown>
         <app-weekly-chart [last7Days]="s.last7Days"></app-weekly-chart>
         <app-recent-activities [recent]="s.recentActivities"></app-recent-activities>
       </div>

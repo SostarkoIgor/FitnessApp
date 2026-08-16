@@ -7,11 +7,15 @@
 
     <label class="field">
       <span class="field__label">Sport</span>
-      <select class="field__input" formControlName="sport">
-        <option *ngFor="let option of sportOptions" [value]="option.value">{{ option.label }}</option>
+      <select class="field__input" formControlName="sport" [disabled]="sportsLoading()">
+        <option *ngIf="sportsLoading()" value="">Loading sports…</option>
+        <option *ngFor="let option of sportOptions()" [value]="option.value">{{ option.label }}</option>
       </select>
       <span class="field__error" *ngIf="form.controls.sport.invalid && form.controls.sport.touched">
         Please choose a sport.
+      </span>
+      <span class="field__error" *ngIf="sportsError()">
+        Couldn't load sports. Please try again later.
       </span>
     </label>
 
@@ -57,7 +61,7 @@
 
     <p class="activity-card__success" *ngIf="activitySuccess()">Activity added.</p>
 
-    <button class="activity-card__submit" type="submit" [disabled]="submittingActivity()">
+    <button class="activity-card__submit" type="submit" [disabled]="submittingActivity() || sportsLoading()">
       {{ submittingActivity() ? 'Adding…' : 'Add activity' }}
     </button>
   </form>

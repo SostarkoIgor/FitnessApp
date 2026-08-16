@@ -2,7 +2,7 @@ import { Component, computed, input } from '@angular/core';
 
 import { DailyPointsDto } from '../../../core/models/activity.model';
 import { parseDateOnly } from '../day-key';
-import { SPORT_LABELS } from '../sport-metadata';
+import { sportLabel } from '../sport-display';
 
 @Component({
   selector: 'app-stat-tiles',
@@ -19,7 +19,7 @@ export class StatTiles {
 
   protected readonly topSportLabel = computed(() => {
     const sport = this.topSport();
-    return sport ? (SPORT_LABELS[sport] ?? sport) : null;
+    return sport ? sportLabel(sport) : null;
   });
 
   protected readonly bestDayDisplay = computed(() => {

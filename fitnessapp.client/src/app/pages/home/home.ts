@@ -2,9 +2,10 @@ import { Component, OnInit, computed, inject, signal } from '@angular/core';
 
 import { ActivityService } from '../../core/services/activity';
 import { ActivityStatsDto } from '../../core/models/activity.model';
+import { SportService } from '../../core/services/sport';
 import { UserDto } from '../../core/models/user.model';
 import { UserService } from '../../core/services/user';
-import { SPORT_LABELS } from './sport-metadata';
+import { sportLabel } from './sport-display';
 
 @Component({
   selector: 'app-home',
@@ -15,6 +16,7 @@ import { SPORT_LABELS } from './sport-metadata';
 export class Home implements OnInit {
   private readonly userService = inject(UserService);
   private readonly activityService = inject(ActivityService);
+  private readonly sportService = inject(SportService);
 
   protected readonly user = signal<UserDto | null>(null);
   protected readonly loading = signal(true);
@@ -22,6 +24,10 @@ export class Home implements OnInit {
 
   protected readonly stats = signal<ActivityStatsDto | null>(null);
   protected readonly statsLoading = signal(true);
+
+  // Canonical, stably-ordered sport list — used only to assign sport-breakdown
+  // colors by position (see sport-display.ts), not for anything sport-choice-related.
+  protected readonly sportOrder = signal<string[]>([]);
 
   protected readonly showLogForm = signal(false);
   protected readonly showAllActivities = signal(false);
@@ -32,12 +38,13 @@ export class Home implements OnInit {
   protected readonly sportChoices = computed(() =>
     (this.stats()?.sportBreakdown ?? []).map(({ sport }) => ({
       value: sport,
-      label: SPORT_LABELS[sport] ?? sport,
+      label: sportLabel(sport),
     })),
   );
 
   ngOnInit() {
     this.loadUser();
+    this.sportService.getAll().subscribe((sports) => this.sportOrder.set(sports.map((s) => s.name)));
   }
 
   openLogForm() {

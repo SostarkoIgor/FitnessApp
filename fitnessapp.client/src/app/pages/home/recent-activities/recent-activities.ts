@@ -1,7 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 
 import { ActivityDto } from '../../../core/models/activity.model';
-import { SPORT_LABELS } from '../sport-metadata';
+import { sportLabel } from '../sport-display';
 
 interface RecentActivityRow {
   id: string;
@@ -22,7 +22,7 @@ export class RecentActivities {
   protected readonly recentActivities = computed<RecentActivityRow[]>(() =>
     this.recent().map((activity) => ({
       id: activity.id,
-      label: SPORT_LABELS[activity.sport] ?? activity.sport,
+      label: sportLabel(activity.sport),
       datetime: activity.datetime,
       points: activity.points,
     })),

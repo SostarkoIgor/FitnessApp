@@ -12,11 +12,11 @@
     </div>
 
     <ng-container *ngIf="!loading() && !error()">
-      <p class="all-activities-card__empty" *ngIf="entries().length === 0">No activities logged yet.</p>
+      <p class="all-activities-card__empty" *ngIf="rows().length === 0">No activities logged yet.</p>
 
-      <ul class="all-activities-list" *ngIf="entries().length">
-        <li class="all-activities-list__row" *ngFor="let activity of entries()">
-          <span class="all-activities-list__sport">{{ sportLabels[activity.sport] ?? activity.sport }}</span>
+      <ul class="all-activities-list" *ngIf="rows().length">
+        <li class="all-activities-list__row" *ngFor="let activity of rows()">
+          <span class="all-activities-list__sport">{{ activity.label }}</span>
           <span class="all-activities-list__date">{{ activity.datetime | date: 'MMM d, y, HH:mm' }}</span>
           <span class="all-activities-list__points">+{{ activity.points }}</span>
         </li>
