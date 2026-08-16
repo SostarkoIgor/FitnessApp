@@ -1,0 +1,21 @@
+<div class="sport-stats-card">
+  <h2 class="sport-stats-card__title">Sport stats</h2>
+  <div class="sport-stats-grid">
+    <div class="sport-stat-tile">
+      <span class="sport-stat-tile__value">{{ totalSessions() }}</span>
+      <span class="sport-stat-tile__label">Sessions</span>
+    </div>
+    <div class="sport-stat-tile">
+      <span class="sport-stat-tile__value">{{ totalPoints() | number }}</span>
+      <span class="sport-stat-tile__label">Total points</span>
+    </div>
+    <div class="sport-stat-tile">
+      <span class="sport-stat-tile__value">{{ bestSession() | number }}</span>
+      <span class="sport-stat-tile__label">Best session</span>
+    </div>
+    <div class="sport-stat-tile">
+      <span class="sport-stat-tile__value">{{ currentStreak() }}</span>
+      <span class="sport-stat-tile__label">Day streak</span>
+    </div>
+  </div>
+</div>

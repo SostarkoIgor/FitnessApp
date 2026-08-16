@@ -5,12 +5,14 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, provideRouter } from '@angular/router';
 
+import { ActivityCalendar } from './activity-calendar/activity-calendar';
 import { ActivityForm } from './activity-form/activity-form';
 import { Home } from './home';
 import { ProgressionChart } from './progression-chart/progression-chart';
 import { RecentActivities } from './recent-activities/recent-activities';
 import { SportBreakdown } from './sport-breakdown/sport-breakdown';
 import { SportDetail } from './sport-detail/sport-detail';
+import { SportStats } from './sport-stats/sport-stats';
 import { StatTiles } from './stat-tiles/stat-tiles';
 import { SummaryBanner } from './summary-banner/summary-banner';
 import { WeeklyChart } from './weekly-chart/weekly-chart';
@@ -31,6 +33,8 @@ describe('Home', () => {
         WeeklyChart,
         RecentActivities,
         ActivityForm,
+        ActivityCalendar,
+        SportStats,
       ],
       imports: [CommonModule, ReactiveFormsModule, RouterModule],
       providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])],

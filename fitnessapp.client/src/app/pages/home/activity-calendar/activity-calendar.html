@@ -1,0 +1,23 @@
+<div class="activity-calendar">
+  <div class="activity-calendar__head">
+    <h2 class="activity-calendar__title">Past 30 days</h2>
+    <span class="activity-calendar__count">
+      {{ activeDayCount() }} active day{{ activeDayCount() === 1 ? '' : 's' }}
+    </span>
+  </div>
+
+  <div class="activity-calendar__weekdays">
+    <span *ngFor="let label of weekdayLabels">{{ label }}</span>
+  </div>
+
+  <div class="activity-calendar__grid">
+    <span
+      class="activity-calendar__cell"
+      *ngFor="let cell of calendarCells()"
+      [class.activity-calendar__cell--muted]="!cell.inRange"
+      [class.activity-calendar__cell--active]="cell.active"
+      [class.activity-calendar__cell--today]="cell.isToday"
+      [title]="cell.inRange ? (cell.active ? 'Active' : 'No activity') : ''"
+    >{{ cell.dayNum }}</span>
+  </div>
+</div>

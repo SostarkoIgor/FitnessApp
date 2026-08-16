@@ -47,7 +47,7 @@
   grid-template-columns: 1fr 1fr;
   grid-template-areas:
     'progression weekly'
-    'recent      recent';
+    'recent      calendar';
   align-items: start;
 }
 
@@ -57,6 +57,7 @@
     grid-template-areas:
       'progression'
       'weekly'
-      'recent';
+      'recent'
+      'calendar';
   }
 }
