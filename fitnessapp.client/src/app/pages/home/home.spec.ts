@@ -10,6 +10,7 @@ import { Home } from './home';
 import { ProgressionChart } from './progression-chart/progression-chart';
 import { RecentActivities } from './recent-activities/recent-activities';
 import { SportBreakdown } from './sport-breakdown/sport-breakdown';
+import { SportDetail } from './sport-detail/sport-detail';
 import { StatTiles } from './stat-tiles/stat-tiles';
 import { SummaryBanner } from './summary-banner/summary-banner';
 import { WeeklyChart } from './weekly-chart/weekly-chart';
@@ -26,6 +27,7 @@ describe('Home', () => {
         StatTiles,
         ProgressionChart,
         SportBreakdown,
+        SportDetail,
         WeeklyChart,
         RecentActivities,
         ActivityForm,

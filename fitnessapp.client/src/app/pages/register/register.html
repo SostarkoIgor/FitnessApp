@@ -43,7 +43,16 @@
       <p class="register-card__subtitle">Already have an account? Enter your user ID to continue.</p>
 
       <label class="field">
-        <span class="field__label">User ID</span>
+        <span class="field__label field__label--with-hint">
+          User ID
+          <span
+            class="field__hint"
+            tabindex="0"
+            title="This is added for easier app testing. To get some interesting user ids you can open swagger and from the leaderboard endpoint fetch all user ids and use them to log in."
+            aria-label="This is added for easier app testing. To get some interesting user ids you can open swagger and from the leaderboard endpoint fetch all user ids and use them to log in."
+            >ⓘ</span
+          >
+        </span>
         <input class="field__input" type="text" formControlName="userId" autocomplete="off" />
         <span
           class="field__error"

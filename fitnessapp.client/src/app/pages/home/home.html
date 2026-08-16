@@ -22,6 +22,8 @@
         <app-recent-activities [activities]="activities()"></app-recent-activities>
       </div>
 
+      <app-sport-detail *ngIf="hasActivities()" [activities]="activities()"></app-sport-detail>
+
       <p class="stats__empty" *ngIf="!hasActivities()">
         Log your first activity to start seeing your stats here.
       </p>

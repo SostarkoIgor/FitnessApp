@@ -1,0 +1,62 @@
+:host {
+  display: block;
+}
+
+.sport-detail-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 1.5rem;
+}
+
+.sport-detail-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.sport-detail-card__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--text-strong);
+}
+
+.sport-detail-card__select {
+  padding: 0.5rem 0.9rem;
+  border: 2px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 700;
+  background: var(--card-bg-alt);
+  color: var(--text-strong);
+}
+
+.sport-detail-card__select:focus {
+  outline: none;
+  border-color: var(--color-violet);
+}
+
+.sport-detail-card__grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    'progression weekly'
+    'recent      recent';
+  align-items: start;
+}
+
+@media (max-width: 720px) {
+  .sport-detail-card__grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'progression'
+      'weekly'
+      'recent';
+  }
+}

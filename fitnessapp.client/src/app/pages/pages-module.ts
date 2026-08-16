@@ -10,6 +10,7 @@ import { ActivityForm } from './home/activity-form/activity-form';
 import { ProgressionChart } from './home/progression-chart/progression-chart';
 import { RecentActivities } from './home/recent-activities/recent-activities';
 import { SportBreakdown } from './home/sport-breakdown/sport-breakdown';
+import { SportDetail } from './home/sport-detail/sport-detail';
 import { StatTiles } from './home/stat-tiles/stat-tiles';
 import { SummaryBanner } from './home/summary-banner/summary-banner';
 import { WeeklyChart } from './home/weekly-chart/weekly-chart';
@@ -23,6 +24,7 @@ import { WeeklyChart } from './home/weekly-chart/weekly-chart';
     StatTiles,
     ProgressionChart,
     SportBreakdown,
+    SportDetail,
     WeeklyChart,
     RecentActivities,
     ActivityForm,

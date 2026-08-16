@@ -1,0 +1,18 @@
+<div class="sport-detail-card" *ngIf="sportChoices().length">
+  <div class="sport-detail-card__head">
+    <h2 class="sport-detail-card__title">Sport breakdown</h2>
+    <select
+      class="sport-detail-card__select"
+      [value]="activeSport()"
+      (change)="selectSport($any($event.target).value)"
+    >
+      <option *ngFor="let choice of sportChoices()" [value]="choice.value">{{ choice.label }}</option>
+    </select>
+  </div>
+
+  <div class="sport-detail-card__grid">
+    <app-progression-chart [activities]="filteredActivities()"></app-progression-chart>
+    <app-weekly-chart [activities]="filteredActivities()"></app-weekly-chart>
+    <app-recent-activities [activities]="filteredActivities()"></app-recent-activities>
+  </div>
+</div>

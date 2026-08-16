@@ -2,14 +2,15 @@
   position: fixed;
   inset: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
   padding: 2rem 1.5rem;
   overflow-y: auto;
   background: linear-gradient(160deg, #eff6ff 0%, #ffffff 45%, #e0f2fe 100%);
 }
 
 .register-card {
+  margin: auto 0;
   background: #ffffff;
   border-radius: 24px;
   box-shadow: 0 20px 45px -15px rgba(37, 99, 235, 0.25);
@@ -45,6 +46,32 @@
   font-size: 0.85rem;
   font-weight: 700;
   color: #1e293b;
+}
+
+.field__label--with-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.field__hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 50%;
+  background: #dbeafe;
+  color: #2563eb;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: help;
+}
+
+.field__hint:hover,
+.field__hint:focus-visible {
+  background: #bfdbfe;
+  outline: none;
 }
 
 .field__input {
