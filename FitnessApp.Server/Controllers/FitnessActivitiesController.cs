@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FitnessApp.Server.Controllers
 {
     [ApiController]
-    [Route("api/activities")]
+    [Route("api/Activities")]
     public class FitnessActivitiesController : ControllerBase
     {
         private readonly IFitnessActivityService _activityService;

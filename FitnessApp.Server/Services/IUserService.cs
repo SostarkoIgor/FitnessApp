@@ -8,6 +8,8 @@ namespace FitnessApp.Server.Services
 
         Task<UserDto?> GetByIdAsync(string id);
 
-        Task<IReadOnlyList<LeaderboardEntryDto>> GetLeaderboardAsync();
+        Task<LeaderboardPageDto> GetLeaderboardAsync(int offset, int limit);
+
+        Task<IReadOnlyList<LeaderboardEntryDto>?> GetLeaderboardAroundUserAsync(string userId);
     }
 }

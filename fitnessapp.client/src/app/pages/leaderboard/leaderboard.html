@@ -25,14 +25,35 @@
 
     <ol *ngIf="rest().length" class="leaderboard__list">
       <li
-        *ngFor="let entry of rest(); let i = index"
+        *ngFor="let entry of rest()"
         class="leaderboard__row"
         [class.leaderboard__row--me]="entry.userId === currentUserId"
       >
-        <span class="leaderboard__rank">{{ i + 4 }}</span>
+        <span class="leaderboard__rank">{{ entry.rank }}</span>
         <span class="leaderboard__name">{{ entry.firstName }} {{ entry.lastName }}</span>
         <span class="leaderboard__points">{{ entry.points }}</span>
       </li>
     </ol>
+
+    <div class="leaderboard__load-more" *ngIf="hasMore()">
+      <button type="button" class="leaderboard__load-more-btn" (click)="loadMore()" [disabled]="loadingMore()">
+        {{ loadingMore() ? 'Loading…' : 'Load more' }}
+      </button>
+    </div>
+
+    <div class="leaderboard__me" *ngIf="showMyPosition()">
+      <h2 class="leaderboard__me-title">Your position</h2>
+      <ol class="leaderboard__list">
+        <li
+          *ngFor="let entry of myPosition()"
+          class="leaderboard__row"
+          [class.leaderboard__row--me]="entry.userId === currentUserId"
+        >
+          <span class="leaderboard__rank">{{ entry.rank }}</span>
+          <span class="leaderboard__name">{{ entry.firstName }} {{ entry.lastName }}</span>
+          <span class="leaderboard__points">{{ entry.points }}</span>
+        </li>
+      </ol>
+    </div>
   </div>
 </section>

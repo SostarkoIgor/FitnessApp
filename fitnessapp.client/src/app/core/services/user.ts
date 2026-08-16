@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import {
   LeaderboardEntryDto,
+  LeaderboardPageDto,
   RegisterUserRequest,
   RegisterUserResponse,
   UserDto,
@@ -24,8 +25,14 @@ export class UserService {
     return this.http.get<UserDto>(`${this.baseUrl}/${id}`);
   }
 
-  getLeaderboard(): Observable<LeaderboardEntryDto[]> {
-    return this.http.get<LeaderboardEntryDto[]>(`${this.baseUrl}/leaderboard`);
+  getLeaderboard(offset: number, limit: number): Observable<LeaderboardPageDto> {
+    return this.http.get<LeaderboardPageDto>(`${this.baseUrl}/leaderboard`, {
+      params: { offset, limit },
+    });
+  }
+
+  getLeaderboardAroundUser(userId: string): Observable<LeaderboardEntryDto[]> {
+    return this.http.get<LeaderboardEntryDto[]>(`${this.baseUrl}/leaderboard/around/${userId}`);
   }
 
   getStoredUserId(): string | null {

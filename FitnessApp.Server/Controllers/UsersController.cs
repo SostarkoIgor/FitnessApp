@@ -41,10 +41,27 @@ namespace FitnessApp.Server.Controllers
         }
 
         [HttpGet("leaderboard")]
-        public async Task<IActionResult> GetLeaderboard()
+        public async Task<IActionResult> GetLeaderboard([FromQuery] int offset = 0, [FromQuery] int limit = 10)
         {
-            var leaderboard = await _userService.GetLeaderboardAsync();
+            if (offset < 0 || limit <= 0 || limit > 100)
+            {
+                return BadRequest();
+            }
+
+            var leaderboard = await _userService.GetLeaderboardAsync(offset, limit);
             return Ok(leaderboard);
+        }
+
+        [HttpGet("leaderboard/around/{id}")]
+        public async Task<IActionResult> GetLeaderboardAroundUser(string id)
+        {
+            var entries = await _userService.GetLeaderboardAroundUserAsync(id);
+            if (entries is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(entries);
         }
     }
 }

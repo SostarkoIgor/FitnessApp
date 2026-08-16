@@ -1,4 +1,4 @@
 namespace FitnessApp.Server.Dtos
 {
-    public record LeaderboardEntryDto(string UserId, string FirstName, string LastName, int Points);
+    public record LeaderboardEntryDto(int Rank, string UserId, string FirstName, string LastName, int Points);
 }

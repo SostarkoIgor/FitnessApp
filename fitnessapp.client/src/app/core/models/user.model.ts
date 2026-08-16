@@ -6,10 +6,17 @@ export interface UserDto {
 }
 
 export interface LeaderboardEntryDto {
+  rank: number;
   userId: string;
   firstName: string;
   lastName: string;
   points: number;
+}
+
+export interface LeaderboardPageDto {
+  entries: LeaderboardEntryDto[];
+  totalCount: number;
+  hasMore: boolean;
 }
 
 export interface RegisterUserRequest {
