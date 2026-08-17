@@ -7,7 +7,7 @@ import { ActivityDto, ActivityPageDto, ActivityStatsDto, CreateActivityRequest }
 @Service()
 export class ActivityService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = '/api/activities';
+  private readonly baseUrl = '/api/activities'; //for simplicity i decided to hardcode routes like this, but ofc i know this in not the approach in real project
 
   create(request: CreateActivityRequest): Observable<ActivityDto> {
     return this.http.post<ActivityDto>(this.baseUrl, request);
